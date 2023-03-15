@@ -119,11 +119,56 @@ const inputClosePin = document.querySelector('.form__input--pin');
 ////////////////////////////////////////////////////////////
 //The new at Method 143
 
-const arr = [23,11,64];
-console.log(arr[0]); //23
-console.log(arr.at(0));//atというので同じことができる。
+// const arr = [23,11,64];
+// console.log(arr[0]); //23
+// console.log(arr.at(0));//atというので同じことができる。
+//
+// console.log(arr[arr.length -1]);//一番最後の数字。64とでる。配列の長さがわからない時は便利。 -1なのは、配列は０から始まるから。
+// console.log(arr.slice(-1)[0]); //これも64
+// console.log(arr.at(-1));//64　atでより簡単に書くことができます！
+// console.log(arr.at(-2)); //11
 
-console.log(arr[arr.length -1]);//一番最後の数字。64とでる。配列の長さがわからない時は便利。 -1なのは、配列は０から始まるから。
-console.log(arr.slice(-1)[0]); //これも64
-console.log(arr.at(-1));//64　atでより簡単に書くことができます！
-console.log(arr.at(-2)); //11
+/////////////////////////////////////////////////////////////
+//Looping arrays : forEach 144
+
+//銀行をイメージして
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];//入金、マイナスは出金
+
+for (const [i,movement] of movements.entries()){ //ループしているのでmovementsが全部でる。entries()の場合は、最初にindexがくる。二つ目に配列の要素。
+  if(movement > 0){
+    console.log(`Movement${i + 1}:Your diposited ${movement}`);
+  }else{
+    console.log(`Movement$${i + 1}:You withdrew ${Math.abs(movement)}`);//math.absでマイナスを消す。
+  }
+}
+
+//新しいやり方
+console.log("-----FOR EACH----");
+movements.forEach(function(movement){ //movementはofみたいな感じ。それぞれをmovementとして、、みたいなね。
+  if(movement > 0){
+      console.log(`Your diposited ${movement}`);
+    }else{
+      console.log(`You withdrew ${movement}`);
+    }
+})
+
+
+console.log("-----FOR EACH // INDEX----"); //indexを取るやり方。
+movements.forEach(function(movement,index,array ){ //名前は全然関係なくて、とても重要なのは、movement, index, arrayの書く順番。最初が現在の要素、次がインデックス、
+  if(movement > 0){
+      console.log(`Movement${index + 1}:Your diposited ${movement}`);
+    }else{
+      console.log(`Movement${index + 1}:You withdrew ${Math.abs(movement)}`);
+    }
+})
+//
+// Movement1:Your diposited 200
+// Movement2:Your diposited 450
+// Movement3:You withdrew 400
+// Movement4:Your diposited 3000
+// Movement5:You withdrew 650
+// Movement6:You withdrew 130
+// Movement7:Your diposited 70
+// Movement8:Your diposited 1300//このように表示される。
+
+//違いは、forEachから抜けられるかどうか。continueとかbreak分は、forEachの中では全く効かない。for of loopなら抜け出せる
