@@ -132,35 +132,35 @@ const inputClosePin = document.querySelector('.form__input--pin');
 //Looping arrays : forEach 144
 
 //銀行をイメージして
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];//入金、マイナスは出金
-
-for (const [i,movement] of movements.entries()){ //ループしているのでmovementsが全部でる。entries()の場合は、最初にindexがくる。二つ目に配列の要素。
-  if(movement > 0){
-    console.log(`Movement${i + 1}:Your diposited ${movement}`);
-  }else{
-    console.log(`Movement$${i + 1}:You withdrew ${Math.abs(movement)}`);//math.absでマイナスを消す。
-  }
-}
-
-//新しいやり方
-console.log("-----FOR EACH----");
-movements.forEach(function(movement){ //movementはofみたいな感じ。それぞれをmovementとして、、みたいなね。
-  if(movement > 0){
-      console.log(`Your diposited ${movement}`);
-    }else{
-      console.log(`You withdrew ${movement}`);
-    }
-})
-
-
-console.log("-----FOR EACH // INDEX----"); //indexを取るやり方。
-movements.forEach(function(movement,index,array ){ //名前は全然関係なくて、とても重要なのは、movement, index, arrayの書く順番。最初が現在の要素、次がインデックス、
-  if(movement > 0){
-      console.log(`Movement${index + 1}:Your diposited ${movement}`);
-    }else{
-      console.log(`Movement${index + 1}:You withdrew ${Math.abs(movement)}`);
-    }
-})
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];//入金、マイナスは出金
+//
+// for (const [i,movement] of movements.entries()){ //ループしているのでmovementsが全部でる。entries()の場合は、最初にindexがくる。二つ目に配列の要素。
+//   if(movement > 0){
+//     console.log(`Movement${i + 1}:Your diposited ${movement}`);
+//   }else{
+//     console.log(`Movement$${i + 1}:You withdrew ${Math.abs(movement)}`);//math.absでマイナスを消す。
+//   }
+// }
+//
+// //新しいやり方
+// console.log("-----FOR EACH----");
+// movements.forEach(function(movement){ //movementはofみたいな感じ。それぞれをmovementとして、、みたいなね。
+//   if(movement > 0){
+//       console.log(`Your diposited ${movement}`);
+//     }else{
+//       console.log(`You withdrew ${movement}`);
+//     }
+// })
+//
+//
+// console.log("-----FOR EACH // INDEX----"); //indexを取るやり方。
+// movements.forEach(function(movement,index,array ){ //名前は全然関係なくて、とても重要なのは、movement, index, arrayの書く順番。最初が現在の要素、次がインデックス、
+//   if(movement > 0){
+//       console.log(`Movement${index + 1}:Your diposited ${movement}`);
+//     }else{
+//       console.log(`Movement${index + 1}:You withdrew ${Math.abs(movement)}`);
+//     }
+// })
 //
 // Movement1:Your diposited 200
 // Movement2:Your diposited 450
@@ -172,3 +172,34 @@ movements.forEach(function(movement,index,array ){ //名前は全然関係なく
 // Movement8:Your diposited 1300//このように表示される。
 
 //違いは、forEachから抜けられるかどうか。continueとかbreak分は、forEachの中では全く効かない。for of loopなら抜け出せる
+
+///////////////////////////////////////
+//forEach with Maps and Sets 145
+
+//通貨マップ
+const currencies = new Map([
+  ['USD', 'United States dollar'],  //左側がkey,右側がvalue
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound sterling'],
+]);
+
+currencies.forEach(function(value,key,map){ //最初のは配列の現在の要素、二つ目はインデックス、3つ目は配列全体。
+  console.log(`${key}: ${value}`);
+})
+
+///USD: United States dollar
+// UR: Euro
+// GBP: Pound sterlingと表示される。
+
+const currenciesUnique = new Set(["USD","UR","USD","EUR","EUR"]);//Setの時、[]で囲むの忘れないで
+console.log(currenciesUnique);
+//Set(3) {'USD', 'UR', 'EUR'} 同じものは省かれる
+
+console.log("---TEST---");
+currenciesUnique.forEach(function(value,key,map){
+  console.log(`${key}: ${value}`);
+})
+///
+// USD: USD
+// UR: UR
+// EUR: EURとなる Setにはキーがないため、keyとvalueは必然的に同じになる。だから別に引数とかいらない。
