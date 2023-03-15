@@ -65,53 +65,65 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+//
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//
+// /////////////////////////////////////////////////
+// //Simply Array Methods 142
+//  let arr = ["a","b","c","d","e"];
+//
+// //SLICE
+//
+//  console.log(arr.slice(2));//(3) ['c', 'd', 'e']Stringの時のslice()と一緒。今回指定したのは２だから、０から始まってC以降を切り出した。
+//  console.log(arr.slice(2,4));//(2) ['c', 'd']　終わりを指定したから、このようになる。エンドパラメーターは含まれない！！
+//
+//  console.log(arr.slice(-2));//(2) ['d', 'e']最後の二つを取る。
+//
+//  console.log(arr.slice(-1));//['e']最後のやつだけ！
+//
+//  console.log(arr.slice(1,-2));//['b', 'c']１から始まって、エンドパラメーターは含まれないからこうなる。
+//
+//  console.log(arr.slice());//5) ['a', 'b', 'c', 'd', 'e']全て抽出
+//  console.log([...arr]);//上と全く同じ結果になる。
+//
+//  //SPLICE
+//  // console.log(arr.splice(2));//(3) ['c', 'd', 'e']
+//  // console.log(arr);//(2) ['a', 'b']
+//  // //⇨spliceを使うと、元の配列も変わってしまう。
+//  // console.log(arr.splice(1));//['b']
+//  // console.log(arr);//['a']
+//  console.log(arr);//['a', 'b', 'c', 'd', 'e']
+//  arr.splice(-1);//一番最後だけ消す。使い方をよくする。
+//  console.log(arr); //(4) ['a', 'b', 'c', 'd']
+//
+// //REVERSE
+// arr = ["a","b","c","d","e"];
+//
+// const arr2 = ["j","i","h","g","f"];
+// console.log(arr2.reverse()); //(5) ['f', 'g', 'h', 'i', 'j']反対から！
+// console.log(arr2);//(5) ['f', 'g', 'h', 'i', 'j']一回リバースすると、元のやつも変わる。
+//
+// //CONCAT
+// const letters = arr.concat(arr2);//arrにarr2をくっつける　
+// console.log(letters);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] JOINみたい。
+// console.log([...arr,...arr2]);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']結果は一緒
+//
+// //JOIN
+// console.log(letters.join("-"));//a-b-c-d-e-f-g-h-i-jとなる。
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+////////////////////////////////////////////////////////////
+//The new at Method 143
 
-/////////////////////////////////////////////////
-//Simply Array Methods 142
- let arr = ["a","b","c","d","e"];
+const arr = [23,11,64];
+console.log(arr[0]); //23
+console.log(arr.at(0));//atというので同じことができる。
 
-//SLICE
-
- console.log(arr.slice(2));//(3) ['c', 'd', 'e']Stringの時のslice()と一緒。今回指定したのは２だから、０から始まってC以降を切り出した。
- console.log(arr.slice(2,4));//(2) ['c', 'd']　終わりを指定したから、このようになる。エンドパラメーターは含まれない！！
-
- console.log(arr.slice(-2));//(2) ['d', 'e']最後の二つを取る。
-
- console.log(arr.slice(-1));//['e']最後のやつだけ！
-
- console.log(arr.slice(1,-2));//['b', 'c']１から始まって、エンドパラメーターは含まれないからこうなる。
-
- console.log(arr.slice());//5) ['a', 'b', 'c', 'd', 'e']全て抽出
- console.log([...arr]);//上と全く同じ結果になる。
-
- //SPLICE
- // console.log(arr.splice(2));//(3) ['c', 'd', 'e']
- // console.log(arr);//(2) ['a', 'b']
- // //⇨spliceを使うと、元の配列も変わってしまう。
- // console.log(arr.splice(1));//['b']
- // console.log(arr);//['a']
- console.log(arr);//['a', 'b', 'c', 'd', 'e']
- arr.splice(-1);//一番最後だけ消す。使い方をよくする。
- console.log(arr); //(4) ['a', 'b', 'c', 'd']
-
-//REVERSE
-arr = ["a","b","c","d","e"];
-
-const arr2 = ["j","i","h","g","f"];
-console.log(arr2.reverse()); //(5) ['f', 'g', 'h', 'i', 'j']反対から！
-console.log(arr2);//(5) ['f', 'g', 'h', 'i', 'j']一回リバースすると、元のやつも変わる。
-
-//CONCAT
-const letters = arr.concat(arr2);//arrにarr2をくっつける　
-console.log(letters);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] JOINみたい。
-console.log([...arr,...arr2]);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']結果は一緒
-
-//JOIN
-console.log(letters.join("-"));//a-b-c-d-e-f-g-h-i-jとなる。
+console.log(arr[arr.length -1]);//一番最後の数字。64とでる。配列の長さがわからない時は便利。 -1なのは、配列は０から始まるから。
+console.log(arr.slice(-1)[0]); //これも64
+console.log(arr.at(-1));//64　atでより簡単に書くことができます！
+console.log(arr.at(-2)); //11
