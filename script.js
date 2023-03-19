@@ -250,20 +250,20 @@ displayMovements(account1.movements);
 //     }
 // })
 
-const juliasDogs = [9, 16, 6, 8, 3];
-const katesDogs = [10, 5, 6, 1, 4];
-
-const juliasDogsCorrect = juliasDogs.slice();
-juliasDogsCorrect.splice(0,1); //最初の一匹と
-juliasDogsCorrect.splice(-2); //最後の2ひきは猫でした〜。
-console.log(juliasDogsCorrect);
-
-const dogs = [...juliasDogsCorrect, ...katesDogs];
-// console.log(dogs);
-dogs.forEach(function(dog,index,array){
-  if (dog > 3 ){
-    console.log(`Dog${index + 1} :  adult! ${dog}yo!`);
-  }else {
-    console.log(`Dog${index + 1} :  puppy! ${dog}yo!`);
-  }
-});
+// const juliasDogs = [9, 16, 6, 8, 3];
+// const katesDogs = [10, 5, 6, 1, 4];
+//
+// const juliasDogsCorrect = juliasDogs.slice();
+// juliasDogsCorrect.splice(0,1); //最初の一匹と
+// juliasDogsCorrect.splice(-2); //最後の2ひきは猫でした〜。
+// console.log(juliasDogsCorrect);
+//
+// const dogs = [...juliasDogsCorrect, ...katesDogs];
+// // console.log(dogs);
+// dogs.forEach(function(dog,index,array){
+//   if (dog > 3 ){
+//     console.log(`Dog${index + 1} :  adult! ${dog}yo!`);
+//   }else {
+//     console.log(`Dog${index + 1} :  puppy! ${dog}yo!`);
+//   }
+// });
