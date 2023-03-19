@@ -61,6 +61,29 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = function(movements){
+  containerMovements.innerHTML = ""; //前にも最初の値を0にするってあったけど、これも空白にして最初の値をからにしている。
+   movements.forEach(function(mov,i){//forEachでループさせる。
+      const type = mov > 0 ? "deposit" : "withdrawal"; //新しいtypeメソッドを作って、三項演算子で0以上ならdeposite,違うならwithdrawlにする。
+     const html = `
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${i -1} ${type}</div>
+          <div class="movements__date">3 days ago</div>
+          <div class="movements__value">${mov}</div>
+        </div>
+     `;//めっちゃオペレーター使う
+     containerMovements.insertAdjacentHTML("afterbegin",html);//afterbeginにすることで、新しい要素はどんどん上に積み重なっていく
+     //insertAdjacentHTMLとはhtml要素を追加する方法。ページ遷移をしないSPAの作成に便利
+
+
+
+   });
+};
+
+displayMovements(account1.movements);
+
+// console.log(containerMovements.innerHTML);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -177,29 +200,29 @@ const inputClosePin = document.querySelector('.form__input--pin');
 //forEach with Maps and Sets 145
 
 //通貨マップ
-const currencies = new Map([
-  ['USD', 'United States dollar'],  //左側がkey,右側がvalue
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-currencies.forEach(function(value,key,map){ //最初のは配列の現在の要素、二つ目はインデックス、3つ目は配列全体。
-  console.log(`${key}: ${value}`);
-})
-
-///USD: United States dollar
-// UR: Euro
-// GBP: Pound sterlingと表示される。
-
-const currenciesUnique = new Set(["USD","UR","USD","EUR","EUR"]);//Setの時、[]で囲むの忘れないで
-console.log(currenciesUnique);
-//Set(3) {'USD', 'UR', 'EUR'} 同じものは省かれる
-
-console.log("---TEST---");
-currenciesUnique.forEach(function(value,key,map){
-  console.log(`${key}: ${value}`);
-})
-///
-// USD: USD
-// UR: UR
-// EUR: EURとなる Setにはキーがないため、keyとvalueは必然的に同じになる。だから別に引数とかいらない。
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],  //左側がkey,右側がvalue
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+//
+// currencies.forEach(function(value,key,map){ //最初のは配列の現在の要素、二つ目はインデックス、3つ目は配列全体。
+//   console.log(`${key}: ${value}`);
+// })
+//
+// ///USD: United States dollar
+// // UR: Euro
+// // GBP: Pound sterlingと表示される。
+//
+// const currenciesUnique = new Set(["USD","UR","USD","EUR","EUR"]);//Setの時、[]で囲むの忘れないで
+// console.log(currenciesUnique);
+// //Set(3) {'USD', 'UR', 'EUR'} 同じものは省かれる
+//
+// console.log("---TEST---");
+// currenciesUnique.forEach(function(value,key,map){
+//   console.log(`${key}: ${value}`);
+// })
+// ///
+// // USD: USD
+// // UR: UR
+// // EUR: EURとなる Setにはキーがないため、keyとvalueは必然的に同じになる。だから別に引数とかいらない。
