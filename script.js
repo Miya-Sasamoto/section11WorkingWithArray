@@ -267,3 +267,63 @@ displayMovements(account1.movements);
 //     console.log(`Dog${index + 1} :  puppy! ${dog}yo!`);
 //   }
 // });
+
+////////////////////////////////////////////////////
+//The Map Method 150
+//mapは新しい配列を作り、元の配列要素に、コールバック関数を適用した結果を各配置に格納する。
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
+
+
+// const movementUSD = movements.map(function(mov){
+//   return mov * eurToUsd; //movementsに1.1をかけた値が返される
+//   // return 23; //全部が23と返される
+// })
+//
+// console.log(movements);
+// console.log(movementUSD);
+
+//これがmapメソッド。元の配列は一歳何も変わらずに、新しい配列を生み出すことができる。
+
+// console.log("---Another Examples");
+// const movementsUSDFor = []; //空の配列を用意する
+//
+// for (const mov of movements)movementsUSDFor.push(mov * eurToUsd); //for of ループを使う方法
+// console.log(movementsUSDFor);　//新しいmapメソッドを使う方が簡単じゃないか？
+
+//アロー関数で書くとこうなる。使いずらくない？arrowはreturnはいらないからね。でもレクチャーはこれがお好きらしい。
+
+console.log("----- ARROW ----");
+const movementUSD = movements.map(mov =>
+   mov * eurToUsd
+);
+
+console.log(movements);
+console.log(movementUSD);
+
+
+// const movementsDescriptions = movements.map(mov,i,arr => {
+//   movements.forEach(function(movement){
+//     if(movement > 0){
+//         return `Movements ${i + 1}: Your diposited ${movement}`;
+//       }else{
+//         return `Movements ${i + 1}: You withdrew ${Math.abs(movement)}` ;
+//   }
+// });
+//
+// console.log(movementsDescriptions);
+
+const movementsDescriptions = movements.map((mov,i,arr) => //アロー嫌い、、
+
+  `Movement ${i + 1}: You ${mov > 0 ? "deposited": "widthdraw"} ${Math.abs(mov)}`
+
+  // if(mov > 0){
+  //   return `Movement ${i + 1}: You deposited ${mov}`;
+  // }else{
+  //   return `Movement${i + 1}: You widthdraw ${Math.abs(mov)}`;
+  // }
+);
+console.log(movementsDescriptions);
+//(8) ['Movement 1: You deposited 200', 'Movement 2: You deposited 450', 'Movement 3: You widthdraw 400', 'Movement 4: You deposited 3000', 'Movement 5: You widthdraw 650', 'Movement 6: You widthdraw 130', 'Movement 7: You deposited 70', 'Movement 8: You deposited 1300']が出る
