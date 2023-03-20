@@ -82,6 +82,25 @@ const displayMovements = function(movements){
 
 displayMovements(account1.movements);
 
+
+const createUsernames = function(accs){
+  accs.forEach(function(acc){
+    acc.userName = acc.owner //それぞれのアカウントにはownerがある。
+      .toLowerCase()
+      .split(" ")
+      .map(name => name[0])
+      // return name[0]; //０番目の文字のみ抽出＝[s] [t] [w] と出る。（全部小文字にした後に、splitで3つに分けて、からのそれぞれの頭文字を抽出して配列に格納。アロー関数で書くとこんな感じ。
+      .join(" ");//全部を小文字にして、それをスペースで区切る。splitだから、配列に3つが入る感じ。joinということはs t w となりました。
+
+  });
+};
+
+
+// const user = "Steven Thomas Williams";ole.log(username);
+
+// console.log(createUsernames("Miya Sasamoto Gonzalez")); //m s g
+console.log(accounts); //accountsの配列が上にある。4つのアカウントが格納されているやつ。
+
 // console.log(containerMovements.innerHTML);
 
 /////////////////////////////////////////////////
@@ -295,35 +314,35 @@ const eurToUsd = 1.1;
 
 //アロー関数で書くとこうなる。使いずらくない？arrowはreturnはいらないからね。でもレクチャーはこれがお好きらしい。
 
-console.log("----- ARROW ----");
-const movementUSD = movements.map(mov =>
-   mov * eurToUsd
-);
-
-console.log(movements);
-console.log(movementUSD);
-
-
-// const movementsDescriptions = movements.map(mov,i,arr => {
-//   movements.forEach(function(movement){
-//     if(movement > 0){
-//         return `Movements ${i + 1}: Your diposited ${movement}`;
-//       }else{
-//         return `Movements ${i + 1}: You withdrew ${Math.abs(movement)}` ;
-//   }
-// });
+// console.log("----- ARROW ----");
+// const movementUSD = movements.map(mov =>
+//    mov * eurToUsd
+// );
 //
+// console.log(movements);
+// console.log(movementUSD);
+//
+//
+// // const movementsDescriptions = movements.map(mov,i,arr => {
+// //   movements.forEach(function(movement){
+// //     if(movement > 0){
+// //         return `Movements ${i + 1}: Your diposited ${movement}`;
+// //       }else{
+// //         return `Movements ${i + 1}: You withdrew ${Math.abs(movement)}` ;
+// //   }
+// // });
+// //
+// // console.log(movementsDescriptions);
+//
+// const movementsDescriptions = movements.map((mov,i,arr) => //アロー嫌い、、
+//
+//   `Movement ${i + 1}: You ${mov > 0 ? "deposited": "widthdraw"} ${Math.abs(mov)}`
+//
+//   // if(mov > 0){
+//   //   return `Movement ${i + 1}: You deposited ${mov}`;
+//   // }else{
+//   //   return `Movement${i + 1}: You widthdraw ${Math.abs(mov)}`;
+//   // }
+// );
 // console.log(movementsDescriptions);
-
-const movementsDescriptions = movements.map((mov,i,arr) => //アロー嫌い、、
-
-  `Movement ${i + 1}: You ${mov > 0 ? "deposited": "widthdraw"} ${Math.abs(mov)}`
-
-  // if(mov > 0){
-  //   return `Movement ${i + 1}: You deposited ${mov}`;
-  // }else{
-  //   return `Movement${i + 1}: You widthdraw ${Math.abs(mov)}`;
-  // }
-);
-console.log(movementsDescriptions);
-//(8) ['Movement 1: You deposited 200', 'Movement 2: You deposited 450', 'Movement 3: You widthdraw 400', 'Movement 4: You deposited 3000', 'Movement 5: You widthdraw 650', 'Movement 6: You widthdraw 130', 'Movement 7: You deposited 70', 'Movement 8: You deposited 1300']が出る
+// //(8) ['Movement 1: You deposited 200', 'Movement 2: You deposited 450', 'Movement 3: You widthdraw 400', 'Movement 4: You deposited 3000', 'Movement 5: You widthdraw 650', 'Movement 6: You widthdraw 130', 'Movement 7: You deposited 70', 'Movement 8: You deposited 1300']が出る
