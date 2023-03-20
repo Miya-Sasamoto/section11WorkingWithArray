@@ -346,3 +346,23 @@ const eurToUsd = 1.1;
 // );
 // console.log(movementsDescriptions);
 // //(8) ['Movement 1: You deposited 200', 'Movement 2: You deposited 450', 'Movement 3: You widthdraw 400', 'Movement 4: You deposited 3000', 'Movement 5: You widthdraw 650', 'Movement 6: You widthdraw 130', 'Movement 7: You deposited 70', 'Movement 8: You deposited 1300']が出る
+
+///////////////////////////
+//The filter methods 152
+//ある条件を満たす要素をフィルタリングする。
+
+const deposits = movements.filter(function(mov){
+  return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+
+});
+
+console.log(movements); //(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(deposits); //(5) [200, 450, 3000, 70, 1300]プラスの値だけ！
+
+console.log("---Another one---");
+const depositsFor = []; //空の配列を作って
+for (const mov of movements) if (mov > 0) depositsFor.push(mov); //pushするのもやり方の一つ。
+console.log(depositsFor);
+
+const widthdrawls = movements.filter(mov => mov < 0); //アロー関数を使って、ネガティブだけを出す
+console.log(widthdrawls);//(3) [-400, -650, -130]
