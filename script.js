@@ -380,7 +380,7 @@ const eurToUsd = 1.1;
 ////////////////////////////////////////////////
 //The reduce Method 153
 
-console.log(movements);//これを全部足したら、合計数になるよね？
+// console.log(movements);//これを全部足したら、合計数になるよね？
 
 //accumulator は雪だるまみたい。どんどん膨れ上がっていく。
 // const balance = movements.reduce(function(acc, cur, i, arr){
@@ -401,25 +401,79 @@ console.log(movements);//これを全部足したら、合計数になるよね�
 // },0); //0からどんどん足していくようにするため、第二引数には０を入れる。ここを１００にすると、初期値も変わる。
 
 //上のやり方をもっとシンプルに書く方法は？アロー関数。またかよ。
-const balance = movements.reduce((acc, cur) => acc + cur, 0);
-//はい、一緒です。
+// const balance = movements.reduce((acc, cur) => acc + cur, 0);
+// //はい、一緒です。
+//
+//
+// console.log(balance); //3840 全てが足された数字になる。
+//
+// console.log("--- For of loop ver.");
+// //みんな大好きfor of ループで代用。しかし、ループインループとかなるとめんどくさくなる。
+// let balance2 = 0; //初期値は０にする。
+// for (const mov of movements) balance2 += mov; //movをmovementsとして、現在のbalance2にmovを足していくループ文を作成
+// console.log(balance2);//3840結果は一緒。
+//
+//
+// //movements配列の最大値をreduce()で取得する方法
+// console.log("---The biggest---");
+// const max = movements.reduce((acc,mov) => { //reduceは勝手にループされるんか
+//   if(acc > mov) //アロー関数の書き方がなれないけど、if elseのときも{}はいらん。おk
+//     return acc;
+//   else
+//     return mov;
+// },movements[0]);//ここではaccが最大値を把握する役割を担う。第二引数は配列の１番目を入れるのが無難。
+// console.log(max); ///30000とでた！期待値です。
 
+// Let's go back to Julia and Kate's study about dogs. This time, they want to convert dog ages to human ages and calculate the average age of the dogs in their study.
+//
+// Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages ('ages'), and does the following things in order:
+//
+// 1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+// 2. Exclude all dogs that are less than 18 human years old (which is the same as keeping dogs that are at least 18 years old)
+// 3. Calculate the average human age of all adult dogs (you should already know from other challenges how we calculate averages 😉)
+// 4. Run the function for both test datasets
+//
+// TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+// TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 
-console.log(balance); //3840 全てが足された数字になる。
+// const movementUSD = movements.map(function(mov){
+//   return mov * eurToUsd; //movementsに1.1をかけた値が返される
+//   // return 23; //全部が23と返される
+// })
+//
+// console.log(movements);
+// console.log(movementUSD);
 
-console.log("--- For of loop ver.");
-//みんな大好きfor of ループで代用。しかし、ループインループとかなるとめんどくさくなる。
-let balance2 = 0; //初期値は０にする。
-for (const mov of movements) balance2 += mov; //movをmovementsとして、現在のbalance2にmovを足していくループ文を作成
-console.log(balance2);//3840結果は一緒。
+const dogs = [5, 2, 4, 1, 15, 8, 3];
 
+const calcAverageHumanAge = dogs.map(function(dogage){
+  if (dogage <= 2 ){
+      return dogage * 2
+  }else {
+    return dogage * 4 + 16;
+  };
+});
 
-//movements配列の最大値をreduce()で取得する方法
-console.log("---The biggest---");
-const max = movements.reduce((acc,mov) => { //reduceは勝手にループされるんか
-  if(acc > mov) //アロー関数の書き方がなれないけど、if elseのときも{}はいらん。おk
-    return acc;
-  else
-    return mov;
-},movements[0]);//ここではaccが最大値を把握する役割を担う。第二引数は配列の１番目を入れるのが無難。
-console.log(max); ///30000とでた！期待値です。
+console.log(dogs);
+console.log(calcAverageHumanAge);
+
+// const deposits = movements.filter(function(mov){
+//   return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+//
+// });
+const adultDogs = calcAverageHumanAge.filter(function(dogs){
+  return dogs > 18;
+});
+
+console.log("---ADULT ONLY---");
+console.log(adultDogs);
+
+// const balance = movements.reduce(function(acc, cur, i, arr){
+//   return acc + cur //これがループみたいな感じになる。
+// // },0); //0からどんどん足していくようにするため、第二引数には０を入れる。
+
+console.log("---Ave---");
+const ageave = adultDogs.reduce(function(acc,cur,i,arr){
+  return (acc + cur ) / arr.length;
+},0);
+console.log(ageave);
