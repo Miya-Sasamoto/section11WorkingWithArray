@@ -69,7 +69,7 @@ const displayMovements = function(movements){
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i -1} ${type}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov}€</div>
         </div>
      `;//めっちゃオペレーター使う
      containerMovements.insertAdjacentHTML("afterbegin",html);//afterbeginにすることで、新しい要素はどんどん上に積み重なっていく
@@ -88,6 +88,30 @@ const calcDisplayBalance = function(movements){
 };
 
 calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function(movements){
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc,mov) => acc + mov,0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const out = movements
+  .filter(mov => mov < 0)
+  .reduce((acc,mov) => acc + mov,);
+  labelSumOut.textContent = `${Math.abs(out)}€`; //math.absは整数にする。この場合はーが消える。
+
+  const interest = movements
+    .filter(mov => mov > 0) //0以上の値をフィルターにかけて、
+    .map(deposit =>  deposit * 1.2 / 100)//この/100がパーセンテージを示す。預け入れの０.１２かける
+    .filter((int,i,arr)=>{
+      console.log(arr);
+      return int >= 1; //1以上の場合のみ適用 
+    })
+    .reduce((acc,int) => acc + int,0);//それを順番に足してく。
+  labelSumInterest.textContent = `${interest}€`;
+
+}
+calcDisplaySummary(account1.movements);
 
 const createUsernames = function(accs){
   accs.forEach(function(acc){
@@ -300,9 +324,9 @@ const createUsernames = function(accs){
 //The Map Method 150
 //mapは新しい配列を作り、元の配列要素に、コールバック関数を適用した結果を各配置に格納する。
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-const eurToUsd = 1.1;
+// const eurToUsd = 1.1;
 
 
 // const movementUSD = movements.map(function(mov){
@@ -444,36 +468,52 @@ const eurToUsd = 1.1;
 // console.log(movements);
 // console.log(movementUSD);
 
-const dogs = [5, 2, 4, 1, 15, 8, 3];
-
-const calcAverageHumanAge = dogs.map(function(dogage){
-  if (dogage <= 2 ){
-      return dogage * 2
-  }else {
-    return dogage * 4 + 16;
-  };
-});
-
-console.log(dogs);
-console.log(calcAverageHumanAge);
-
-// const deposits = movements.filter(function(mov){
-//   return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+// const dogs = [5, 2, 4, 1, 15, 8, 3];
 //
+// const calcAverageHumanAge = dogs.map(function(dogage){
+//   if (dogage <= 2 ){
+//       return dogage * 2
+//   }else {
+//     return dogage * 4 + 16;
+//   };
 // });
-const adultDogs = calcAverageHumanAge.filter(function(dogs){
-  return dogs > 18;
-});
+//
+// console.log(dogs);
+// console.log(calcAverageHumanAge);
+//
+// // const deposits = movements.filter(function(mov){
+// //   return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+// //
+// // });
+// const adultDogs = calcAverageHumanAge.filter(function(dogs){
+//   return dogs > 18;
+// });
+//
+// console.log("---ADULT ONLY---");
+// console.log(adultDogs);
+//
+// // const balance = movements.reduce(function(acc, cur, i, arr){
+// //   return acc + cur //これがループみたいな感じになる。
+// // // },0); //0からどんどん足していくようにするため、第二引数には０を入れる。
+//
+// console.log("---Ave---");
+// const ageave = adultDogs.reduce(function(acc,cur,i,arr){
+//   return (acc + cur ) / arr.length;
+// },0);
+// console.log(ageave);
 
-console.log("---ADULT ONLY---");
-console.log(adultDogs);
+//////////////////////////////////////////
+//The magic of chaining methods 155
 
-// const balance = movements.reduce(function(acc, cur, i, arr){
-//   return acc + cur //これがループみたいな感じになる。
-// // },0); //0からどんどん足していくようにするため、第二引数には０を入れる。
+//今までは単独で動かしてきたが、今回は全てを繋げてやってみよう。
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-console.log("---Ave---");
-const ageave = adultDogs.reduce(function(acc,cur,i,arr){
-  return (acc + cur ) / arr.length;
-},0);
-console.log(ageave);
+const eurToUsd = 1.1;
+
+//パイプライン的な.でも全てをチェーンにして書くと、何かエラーが起きた時にデバックしず楽なるそうです。そのステップからそのエラーが怒ったかわからないもんね。⇨解決策は、異なるステップごとに配列を確認すること。らしい。
+const totalDepositUSD = movements
+  .filter(mov => mov > 0)　//0以上のものだけが生き残る。出金じゃなくて入金だけをカウントする。
+  .map(mov => mov * eurToUsd) //生き残ったやつに1.1をかける。
+  .reduce((acc,mov) => acc + mov ,0);//１.1をかけられたやつを０からスタートして全て足していく。
+
+console.log(totalDepositUSD);//5522.000000000001答えはこうなりました。
