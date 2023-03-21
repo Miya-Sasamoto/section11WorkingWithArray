@@ -506,9 +506,9 @@ const createUsernames = function(accs){
 //The magic of chaining methods 155
 
 //今までは単独で動かしてきたが、今回は全てを繋げてやってみよう。
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-//
-// const eurToUsd = 1.1;
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
 //
 // //パイプライン的な.でも全てをチェーンにして書くと、何かエラーが起きた時にデバックしず楽なるそうです。そのステップからそのエラーが怒ったかわからないもんね。⇨解決策は、異なるステップごとに配列を確認すること。らしい。
 // const totalDepositUSD = movements
@@ -528,9 +528,23 @@ TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 
 GOOD LUCK 😀
 */
+//
+// const calcAverageHumanAge = ages =>
+//   ages
+//     .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+//     .filter(age => age >= 18)
+//     .reduce((acc,age,i,arr) => acc + age ? arr.length,0); //これが平均の出し方
 
-const calcAverageHumanAge = ages =>
-  ages
-    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
-    .filter(age => age >= 18)
-    .reduce((acc,age,i,arr) => acc + age ? arr.length,0); //これが平均の出し方
+///////////////////////////////////////////
+//The find method 157
+//名前の通り、条件に基づいて、配列の一つの要素を取り出すことができる。
+//findh配列をループする別のメソッド。
+console.log("---FIND---");
+const firstWidthdrawal = movements.find(mov => mov < 0)//filterとは違って新しい配列を返すのではなく、配列の中でこの条件を満たす最初の要素を返すだけ。filterは条件に合致するものを全て返却するのだが。そして配列にはならない。
+console.log(movements);//[200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(firstWidthdrawal);//-400 となる。最初の値だけが表示されるから！
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === "Jessica Davis");//ownerがこの名前に一致するもののみ表示。
+console.log(account);
