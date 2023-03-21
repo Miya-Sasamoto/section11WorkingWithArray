@@ -82,6 +82,12 @@ const displayMovements = function(movements){
 
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function(movements){
+  const balance = movements.reduce((acc,mov) => acc + mov ,0); //さっき下でやった他していくのやつ
+  labelBalance.textContent = `${balance} EUR`; //テキストコンテントで直接いじる。
+};
+
+calcDisplayBalance(account1.movements);
 
 const createUsernames = function(accs){
   accs.forEach(function(acc){
@@ -96,10 +102,13 @@ const createUsernames = function(accs){
 };
 
 
+
+
+
 // const user = "Steven Thomas Williams";ole.log(username);
 
 // console.log(createUsernames("Miya Sasamoto Gonzalez")); //m s g
-console.log(accounts); //accountsの配列が上にある。4つのアカウントが格納されているやつ。
+// console.log(accounts); //accountsの配列が上にある。4つのアカウントが格納されているやつ。
 
 // console.log(containerMovements.innerHTML);
 
@@ -351,18 +360,66 @@ const eurToUsd = 1.1;
 //The filter methods 152
 //ある条件を満たす要素をフィルタリングする。
 
-const deposits = movements.filter(function(mov){
-  return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+// const deposits = movements.filter(function(mov){
+//   return mov > 0; //これだけで0以上のものだけがフィルターにかけられて生き残る。
+//
+// });
+//
+// console.log(movements); //(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// console.log(deposits); //(5) [200, 450, 3000, 70, 1300]プラスの値だけ！
+//
+// console.log("---Another one---");
+// const depositsFor = []; //空の配列を作って
+// for (const mov of movements) if (mov > 0) depositsFor.push(mov); //pushするのもやり方の一つ。
+// console.log(depositsFor);
+//
+// const widthdrawls = movements.filter(mov => mov < 0); //アロー関数を使って、ネガティブだけを出す
+// console.log(widthdrawls);//(3) [-400, -650, -130]
 
-});
 
-console.log(movements); //(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-console.log(deposits); //(5) [200, 450, 3000, 70, 1300]プラスの値だけ！
+////////////////////////////////////////////////
+//The reduce Method 153
 
-console.log("---Another one---");
-const depositsFor = []; //空の配列を作って
-for (const mov of movements) if (mov > 0) depositsFor.push(mov); //pushするのもやり方の一つ。
-console.log(depositsFor);
+console.log(movements);//これを全部足したら、合計数になるよね？
 
-const widthdrawls = movements.filter(mov => mov < 0); //アロー関数を使って、ネガティブだけを出す
-console.log(widthdrawls);//(3) [-400, -650, -130]
+//accumulator は雪だるまみたい。どんどん膨れ上がっていく。
+// const balance = movements.reduce(function(acc, cur, i, arr){
+//   console.log(`Iteration ${i + 1}: ${acc}`); //これでどんな感じでどの順番でどのようにして数が増えていっているのかがわかる
+//   // Iteration 1: 0 初期値は０でしょ（第二引数で０を渡した）
+//   // Iteration 2: 200　(movementsの一つ目)
+//   // Iteration 3: 650　(200 + 450)
+//   // Iteration 4: 250 (650 - 400)
+//   // Iteration 5: 3250 (250 + 3000)
+//   // Iteration 6: 2600 (3250 - 650)
+//   // Iteration 7: 2470 ( 2600 - 130 )
+//   // Iteration 8: 2540 ( 2470 + 70 ) で最後にこれ2540に1300を足して3840になる。
+//   //⇨めっちゃビジュアル化している。
+//
+//
+//
+//   return acc + cur //これがループみたいな感じになる。
+// },0); //0からどんどん足していくようにするため、第二引数には０を入れる。ここを１００にすると、初期値も変わる。
+
+//上のやり方をもっとシンプルに書く方法は？アロー関数。またかよ。
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+//はい、一緒です。
+
+
+console.log(balance); //3840 全てが足された数字になる。
+
+console.log("--- For of loop ver.");
+//みんな大好きfor of ループで代用。しかし、ループインループとかなるとめんどくさくなる。
+let balance2 = 0; //初期値は０にする。
+for (const mov of movements) balance2 += mov; //movをmovementsとして、現在のbalance2にmovを足していくループ文を作成
+console.log(balance2);//3840結果は一緒。
+
+
+//movements配列の最大値をreduce()で取得する方法
+console.log("---The biggest---");
+const max = movements.reduce((acc,mov) => { //reduceは勝手にループされるんか
+  if(acc > mov) //アロー関数の書き方がなれないけど、if elseのときも{}はいらん。おk
+    return acc;
+  else
+    return mov;
+},movements[0]);//ここではaccが最大値を把握する役割を担う。第二引数は配列の１番目を入れるのが無難。
+console.log(max); ///30000とでた！期待値です。
