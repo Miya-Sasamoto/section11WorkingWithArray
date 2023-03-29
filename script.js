@@ -74,3 +74,53 @@ const currencies = new Map([
 ]);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+///////////////////////////////////////////////////////////
+//SLICE METHODS
+let arr = ["a", "b", "c", "d", "e"];
+console.log(arr); //(5) ['a', 'b', 'c', 'd', 'e']
+console.log(arr.slice(2)); //(3) ['c', 'd', 'e'] 通常、引数に一つの数字しか描かれない場合はbeginだからそれ以降という意味。そしてsliceは新しく配列を返すということも忘れずに。元の配列は変えない。　　
+console.log(arr.slice(2,4)); //(2) ['c', 'd']となる。endは含まれない。beginは入ります。2,4ということは、2,3ということでいいんです。
+console.log(arr.slice(-2));//(2) ['d', 'e']最後の二つを持ってくるという意味。
+console.log(arr.slice(-1));//一番最後の。['e']だけです。
+console.log(arr.slice(1,-2));//(2) ['b', 'c']となる。bから始まって、endは含まれないからcになるってこと。
+
+console.log(arr.slice()); //引数を渡してないから（5) ['a', 'b', 'c', 'd', 'e']だよね。
+console.log([...arr]);//sliceにarrayかっこを作って入れるべきか、それはなんでもいいです。
+console.log(...arr);//これは普通に中だけ取り出されるね。a b c d e　arrayを入れてないから。
+
+//SPLICE METHODS
+//これが違うのは元の配列さえも変異させてしまうこと。
+console.log("---SPLICE---");
+// console.log(arr.splice(2));//(3) ['c', 'd', 'e']beginパラメターだから。
+arr.splice(-1); //spliceがよく使われるのはこんな感じだけ。最後の一つを取り除く時にはよく使われるけど、それ以外はあまり使われない。結果は(4) ['a', 'b', 'c', 'd']だね。
+console.log(arr);//(2) ['a', 'b']さっき、後ろの3つ取ったから、残りはこの2つ。元の配列も変わってしまいました。
+//spliceは引数の数字の意味が少し違う。
+console.log("---EXAMPLE---");
+console.log(arr); //(4) ['a', 'b', 'c', 'd']
+arr.splice(1,2); //一つ目の引数はbegin,始まる箇所だから"b".違うのは二つ目の引数は削除したい要素の数。この場合2つ消したいからbとcが消える。
+console.log(arr);//(2) ['a', 'd']となる。
+
+//REVERSE METHODS
+arr = ["a", "b", "c", "d", "e"];
+const arr2 = ["j","i","h","g","f"];
+
+console.log("---REVERSE---");
+console.log(arr2.reverse());//(5) ['f', 'g', 'h', 'i', 'j']反対になる。
+console.log(arr2);//(5) ['f', 'g', 'h', 'i', 'j']reverseメソッドも元の配列を変化させる。
+
+//CONCAT METHODS
+//二つの配列を連携する時に使う。元の配列にも影響なし
+console.log("---CONCAT---");
+
+const letters = arr.concat(arr2); //最初に来る方が最初。引数チックに来る方が続くやつ！
+console.log(letters);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+const letter2 = arr2.concat(arr);
+console.log(letter2);//(10) ['f', 'g', 'h', 'i', 'j', 'a', 'b', 'c', 'd', 'e']
+
+console.log([...arr, ...arr2]);//(10) ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']これでも一緒の結果
+
+///JOIN METHODS
+console.log("---JOIN---");
+console.log(letters.join("-"));//a-b-c-d-e-f-g-h-i-jとなる。
