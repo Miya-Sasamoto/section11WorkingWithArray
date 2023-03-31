@@ -66,12 +66,12 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+//
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
 
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
@@ -139,44 +139,70 @@ const currencies = new Map([
 /////////////////////////////////////////////////
 //144.Looping Arrays: forEach
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-//これが今までのやり方。
-for (const movement of movements){ //こんがらがりやすいけど、左が新しく定義して、右がそれはこれでみたいな感じ
-  if (movement > 0){
-    console.log(`You deposited ${movement}`);
-  }else{
-    console.log(`You withdrawal ${Math.abs(movement)}`);//Math.absは何度もやっている通り、符号を削除します。
-  }
-}
-//上記をforEachループを使って書くやり方。
-//forEachメソッドの行うことは、配列の上でループをすること。それぞれの反復の中で、コールバック関数を実行します。
-//結果は一緒
-console.log("---FOR EACH----");
-movements.forEach(function(movement){ //左が元のやつで、右のやつで新しく名前を定義しているみたいな感じ。
-  if (movement > 0){
-    console.log(`You deposited ${movement}`);
-  }else{
-    console.log(`You withdrawal ${Math.abs(movement)}`);
-  }
-});
-
-//これをまた違う方法で書いてみましょう。今度はカウントもつけてみましょう。
-for (const [i,movement] of movements.entries()){ //entriesは配列の配列を返す。覚えてる？
-  if (movement > 0){
-    console.log(`Movement ${i + 1}: You deposited ${movement}`);
-  }else{
-    console.log(`Movement ${i + 1}: You withdrawal ${Math.abs(movement)}`);//Math.absは何度もやっている通り、符号を削除します。
-  }
-}
-//今度は先程のカウントありのやつを、forEachメソッドでやってみましょう。
-//forEachは現在の要素、インデックス、ループしている配列全体も渡す。
-console.log("--con Counter forEach---");
-movements.forEach(function(mov,i,arr){//大事なのはこの引数の順番です。最初はさっきと同じ、次は今のインデックス、3つ目はループする配列全体を表している。　
-  if (mov > 0){
-    console.log(`Movement ${i + 1}: You deposited ${mov}`);
-  }else{
-    console.log(`Movement ${i + 1}: You withdrawal ${Math.abs(mov)}`);
-  }
-});
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//
+// //これが今までのやり方。
+// for (const movement of movements){ //こんがらがりやすいけど、左が新しく定義して、右がそれはこれでみたいな感じ
+//   if (movement > 0){
+//     console.log(`You deposited ${movement}`);
+//   }else{
+//     console.log(`You withdrawal ${Math.abs(movement)}`);//Math.absは何度もやっている通り、符号を削除します。
+//   }
+// }
+// //上記をforEachループを使って書くやり方。
+// //forEachメソッドの行うことは、配列の上でループをすること。それぞれの反復の中で、コールバック関数を実行します。
+// //結果は一緒
+// console.log("---FOR EACH----");
+// movements.forEach(function(movement){ //左が元のやつで、右のやつで新しく名前を定義しているみたいな感じ。
+//   if (movement > 0){
+//     console.log(`You deposited ${movement}`);
+//   }else{
+//     console.log(`You withdrawal ${Math.abs(movement)}`);
+//   }
+// });
+//
+// //これをまた違う方法で書いてみましょう。今度はカウントもつけてみましょう。
+// for (const [i,movement] of movements.entries()){ //entriesは配列の配列を返す。覚えてる？
+//   if (movement > 0){
+//     console.log(`Movement ${i + 1}: You deposited ${movement}`);
+//   }else{
+//     console.log(`Movement ${i + 1}: You withdrawal ${Math.abs(movement)}`);//Math.absは何度もやっている通り、符号を削除します。
+//   }
+// }
+// //今度は先程のカウントありのやつを、forEachメソッドでやってみましょう。
+// //forEachは現在の要素、インデックス、ループしている配列全体も渡す。
+// console.log("--con Counter forEach---");
+// movements.forEach(function(mov,i,arr){//大事なのはこの引数の順番です。最初はさっきと同じ、次は今のインデックス、3つ目はループする配列全体を表している。　
+//   if (mov > 0){
+//     console.log(`Movement ${i + 1}: You deposited ${mov}`);
+//   }else{
+//     console.log(`Movement ${i + 1}: You withdrawal ${Math.abs(mov)}`);
+//   }
+// });
 //これでオッケーですう。
+
+//////////////////////////////////////////////////////////
+//145.forEach With Maps and Sets
+
+//Maps
+const currencies = new Map([
+  ['USD', 'United States dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound sterling'],
+]);
+
+currencies.forEach(function(value,key,map){ //これも引数の順番が肝心。一つ目が値、二つ目はキー、三つ目はループするマップ全体。arrayの時と似ています。
+  console.log(`${key}:${value}`);
+//USD:United States dollar
+//EUR:Euro
+//GBP:Pound sterling　と表示される。make senseね。
+});
+
+//これをsetでやってみましょう。
+const currenciesUnique = new Set(["USD","EUR","JPY","EUR","USD"]);
+console.log(currenciesUnique);
+//et(3) {'USD', 'EUR', 'JPY'}とでる。setはユニークな値を抽出するのだ。
+
+currenciesUnique.forEach(function(value,key,map){
+  console.log(`${key}:${value}`);
+})
