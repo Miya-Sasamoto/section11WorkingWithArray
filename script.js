@@ -8,7 +8,7 @@
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
-  interestRate: 1.2, // %
+  interestRate: 1.2, // 金利
   pin: 1111,
 };
 
@@ -61,6 +61,22 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+
+const displayMovements = function(movements){ //必ずハードコーデイィングではなくて関数を作る癖をつけましょう。
+  containerMovements.innerHTML = "";
+  movements.forEach(function(mov,i){ //それぞれのアカウントのmovementsの配列があるよね。
+    const type = mov > 0 ? "deposit" : "withdrawal"; //三項演算子ですよ。だいぶ慣れた、
+
+     const html = `
+       <div class="movements__row">
+         <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+         <div class="movements__value"> ${mov}</div>
+       </div>
+     `; //こんな感じで使えるから、テンプレートリテラルはめっちゃ便利。typeはそれによって、cssが変わるから、クラス名に入れることもできる。インデックスは+1するのは０ベースだからね。
+     containerMovements.insertAdjacentHTML("afterbegin",html);//これが結構新しい概念かも。containerMovementsは上にグローバル関数が作られている。insertAdjacentHTMLっていうのは、それをhtml上に表示させるためのやり方。afterbeginがbeforeendをよく使うんだけど、afterbeginだと新しい情報が上から降りてくる感じ。
+  })
+}
+displayMovements(account1.movements);
 
 
 /////////////////////////////////////////////////
@@ -205,4 +221,7 @@ console.log(currenciesUnique);
 
 currenciesUnique.forEach(function(value,key,map){
   console.log(`${key}:${value}`);
+  //USD:USD
+  //EUR:EUR
+  //PY:JPY このままだと、keyとvalueが一緒のやつが表示されてしまう。実はsetにはキーが存在しない。そしてインデックスも存在しない。 ということは、これは意味がないということだ。　
 })
