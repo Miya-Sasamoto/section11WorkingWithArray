@@ -92,26 +92,26 @@ displayMovements(account1.movements);
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 ///////////////////////////////////////////////////////////
-//SLICE METHODS
-let arr = ["a", "b", "c", "d", "e"];
-// console.log(arr); //(5) ['a', 'b', 'c', 'd', 'e']
-// console.log(arr.slice(2)); //(3) ['c', 'd', 'e'] 通常、引数に一つの数字しか描かれない場合はbeginだからそれ以降という意味。そしてsliceは新しく配列を返すということも忘れずに。元の配列は変えない。　　
-// console.log(arr.slice(2,4)); //(2) ['c', 'd']となる。endは含まれない。beginは入ります。2,4ということは、2,3ということでいいんです。
-// console.log(arr.slice(-2));//(2) ['d', 'e']最後の二つを持ってくるという意味。
-// console.log(arr.slice(-1));//一番最後の。['e']だけです。
-// console.log(arr.slice(1,-2));//(2) ['b', 'c']となる。bから始まって、endは含まれないからcになるってこと。
-//
-// console.log(arr.slice()); //引数を渡してないから（5) ['a', 'b', 'c', 'd', 'e']だよね。
-// console.log([...arr]);//sliceにarrayかっこを作って入れるべきか、それはなんでもいいです。
-// console.log(...arr);//これは普通に中だけ取り出されるね。a b c d e　arrayを入れてないから。
-//
-//SPLICE METHODS
-//これが違うのは元の配列さえも変異させてしまうこと。
-console.log("---SPLICE---");
-// console.log(arr.splice(2));//(3) ['c', 'd', 'e']beginパラメターだから。
-arr.splice(-1); //spliceがよく使われるのはこんな感じだけ。最後の一つを取り除く時にはよく使われるけど、それ以外はあまり使われない。結果は(4) ['a', 'b', 'c', 'd']だね。
-console.log(arr);//(2) ['a', 'b']さっき、後ろの3つ取ったから、残りはこの2つ。元の配列も変わってしまいました。
-// //spliceは引数の数字の意味が少し違う。
+// //SLICE METHODS
+// let arr = ["a", "b", "c", "d", "e"];
+// // console.log(arr); //(5) ['a', 'b', 'c', 'd', 'e']
+// // console.log(arr.slice(2)); //(3) ['c', 'd', 'e'] 通常、引数に一つの数字しか描かれない場合はbeginだからそれ以降という意味。そしてsliceは新しく配列を返すということも忘れずに。元の配列は変えない。　　
+// // console.log(arr.slice(2,4)); //(2) ['c', 'd']となる。endは含まれない。beginは入ります。2,4ということは、2,3ということでいいんです。
+// // console.log(arr.slice(-2));//(2) ['d', 'e']最後の二つを持ってくるという意味。
+// // console.log(arr.slice(-1));//一番最後の。['e']だけです。
+// // console.log(arr.slice(1,-2));//(2) ['b', 'c']となる。bから始まって、endは含まれないからcになるってこと。
+// //
+// // console.log(arr.slice()); //引数を渡してないから（5) ['a', 'b', 'c', 'd', 'e']だよね。
+// // console.log([...arr]);//sliceにarrayかっこを作って入れるべきか、それはなんでもいいです。
+// // console.log(...arr);//これは普通に中だけ取り出されるね。a b c d e　arrayを入れてないから。
+// //
+// //SPLICE METHODS
+// //これが違うのは元の配列さえも変異させてしまうこと。
+// console.log("---SPLICE---");
+// // console.log(arr.splice(2));//(3) ['c', 'd', 'e']beginパラメターだから。
+// arr.splice(-1); //spliceがよく使われるのはこんな感じだけ。最後の一つを取り除く時にはよく使われるけど、それ以外はあまり使われない。結果は(4) ['a', 'b', 'c', 'd']だね。
+// console.log(arr);//(2) ['a', 'b']さっき、後ろの3つ取ったから、残りはこの2つ。元の配列も変わってしまいました。
+// // //spliceは引数の数字の意味が少し違う。
 // console.log("---EXAMPLE---");
 // console.log(arr); //(4) ['a', 'b', 'c', 'd']
 // arr.splice(1,2); //一つ目の引数はbegin,始まる箇所だから"b".違うのは二つ目の引数は削除したい要素の数。この場合2つ消したいからbとcが消える。
@@ -201,30 +201,30 @@ console.log(arr);//(2) ['a', 'b']さっき、後ろの3つ取ったから、残
 //145.forEach With Maps and Sets
 
 //Maps
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-currencies.forEach(function(value,key,map){ //これも引数の順番が肝心。一つ目が値、二つ目はキー、三つ目はループするマップ全体。arrayの時と似ています。
-  console.log(`${key}:${value}`);
-//USD:United States dollar
-//EUR:Euro
-//GBP:Pound sterling　と表示される。make senseね。
-});
-
-//これをsetでやってみましょう。
-const currenciesUnique = new Set(["USD","EUR","JPY","EUR","USD"]);
-console.log(currenciesUnique);
-//et(3) {'USD', 'EUR', 'JPY'}とでる。setはユニークな値を抽出するのだ。
-
-currenciesUnique.forEach(function(value,key,map){
-  console.log(`${key}:${value}`);
-  //USD:USD
-  //EUR:EUR
-  //PY:JPY このままだと、keyとvalueが一緒のやつが表示されてしまう。実はsetにはキーが存在しない。そしてインデックスも存在しない。 ということは、これは意味がないということだ。　
-})
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+//
+// currencies.forEach(function(value,key,map){ //これも引数の順番が肝心。一つ目が値、二つ目はキー、三つ目はループするマップ全体。arrayの時と似ています。
+//   console.log(`${key}:${value}`);
+// //USD:United States dollar
+// //EUR:Euro
+// //GBP:Pound sterling　と表示される。make senseね。
+// });
+//
+// //これをsetでやってみましょう。
+// const currenciesUnique = new Set(["USD","EUR","JPY","EUR","USD"]);
+// console.log(currenciesUnique);
+// //et(3) {'USD', 'EUR', 'JPY'}とでる。setはユニークな値を抽出するのだ。
+//
+// currenciesUnique.forEach(function(value,key,map){
+//   console.log(`${key}:${value}`);
+//   //USD:USD
+//   //EUR:EUR
+//   //PY:JPY このままだと、keyとvalueが一緒のやつが表示されてしまう。実はsetにはキーが存在しない。そしてインデックスも存在しない。 ということは、これは意味がないということだ。　
+// })
 
 ///////////////////////////////////////
 // Coding Challenge #1
@@ -247,22 +247,52 @@ TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
 GOOD LUCK 😀
 */
 
-const checkDogs = function(dogsJulia,dogsKate){
-    const dogsJuliaCorrected = dogsJulia.slice(); //薄いコピーを作る。
-    dogsJuliaCorrected.splice(0,1);
-    dogsJuliaCorrected.splice(-2);
-    // console.log(dogsJuliaCorrected);
+// const checkDogs = function(dogsJulia,dogsKate){
+//     const dogsJuliaCorrected = dogsJulia.slice(); //薄いコピーを作る。
+//     dogsJuliaCorrected.splice(0,1);
+//     dogsJuliaCorrected.splice(-2);
+//     // console.log(dogsJuliaCorrected);
+//
+//     const dogs = dogsJuliaCorrected.concat(dogsKate);//三つドットのやつもいいけど、配列のコースだから、concatの方がいいね。これでも同じ結果だよ。
+//     console.log(dogs);
+//     dogs.forEach(function(dog,i){
+//       if (dog >= 3){
+//         console.log(`${i + 1} : ADULT!`);
+//       }else{
+//         console.log(`${i + 1} : PUPPY!`);
+//       }
+//     })
+//
+//
+// }
+// checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
 
-    const dogs = dogsJuliaCorrected.concat(dogsKate);//三つドットのやつもいいけど、配列のコースだから、concatの方がいいね。これでも同じ結果だよ。
-    console.log(dogs);
-    dogs.forEach(function(dog,i){
-      if (dog >= 3){
-        console.log(`${i + 1} : ADULT!`);
-      }else{
-        console.log(`${i + 1} : PUPPY!`);
-      }
-    })
+//////////////////////////////////////////////////////////
+//150.The map METHODS
+ //新しい配列を作成し、元の配列要素に、コールバック関数を適用した結果を返す。元の配列も変わらないよ。
 
+ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-}
-checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
+ const eurToUsd = 1.1;
+//mapは関数を使っている
+ // const movementsUsd = movements.map(function(mov){
+ //   return mov * eurToUsd;
+ //   // return 23;//これだと全部23と帰ってくる
+ // })
+
+console.log(movements); //上の配列のやつ
+// console.log(movementsUsd);//movements配列に1.1を掛けたやつがここに新しい配列となって格納されている。
+
+//このように書くこともできる。こっちは単純に一つの配列をループして新しい配列を手動で作成している。同じことをやってるように見えて実はやってることは全然違う。
+const movementsUSDfor = [];//新しい配列を作る
+for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);//そこにpushをする感じね。forOf構文を使う
+console.log(movementsUSDfor);//結果はmapを使った時と全く一緒。
+
+//大嫌いなアロー関数です。きっと多くの人が嫌いだけど、アロー関数を理解していれば、短く書けるし便利だよ。
+const movementsUsd = movements.map (mov => mov * eurToUsd );
+console.log(movementsUsd);
+
+const movemetsDiscription =  movements.map((mov,i,arr) =>
+　`Movements ${i + 1}: You ${mov > 0 ? "deposit" : "withdrawal"} ${Math.abs(mov)}`
+);//三項演算子を使うと、こんな感じでもっと短く書くことができる
+console.log(movemetsDiscription);
