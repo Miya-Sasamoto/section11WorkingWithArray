@@ -319,7 +319,7 @@ GOOD LUCK 😀
 //150.The map METHODS
  //新しい配列を作成し、元の配列要素に、コールバック関数を適用した結果を返す。元の配列も変わらないよ。
 
-//  const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+ // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 //
 //  const eurToUsd = 1.1;
 // //mapは関数を使っている
@@ -344,3 +344,22 @@ GOOD LUCK 😀
 // 　`Movements ${i + 1}: You ${mov > 0 ? "deposit" : "withdrawal"} ${Math.abs(mov)}`
 // );//三項演算子を使うと、こんな感じでもっと短く書くことができる
 // console.log(movemetsDiscription);
+
+///////////////////////////////////////////////////////
+//152. The filter Method
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits =  movements.filter(function(mov){
+  return mov > 0; //０以上の値だけがフィルタリングされて表示される。
+});
+console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(deposits);//(5) [200, 450, 3000, 70, 1300]だね。正の値だけ
+
+//やりたがるfor of ループでのやり方。ただ、メソッドを使う方が、配列と
+const depositsFor = [];
+for (const mov of movements)if (mov > 0)depositsFor.push(mov);
+console.log(depositsFor); //これもさっきと結果は一緒。
+
+//アロー関数で書くとこんな感じです。
+const withdrawal = movements.filter(mov => mov < 0 );
+console.log(withdrawal);//(3) [-400, -650, -130]
