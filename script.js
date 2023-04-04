@@ -78,6 +78,55 @@ const displayMovements = function(movements){ //必ずハードコーデイィ�
 }
 displayMovements(account1.movements);
 
+//151. Computing Usernames でアカウントのユーザー名を作る
+//ここからスタートって書いてあるところから始めた。
+
+const createUsernames = function(accs){
+  accs.forEach(function(acc){
+    acc.username = acc.owner //このownerというのは下の。
+      .toLowerCase()
+      .split(" ")
+      .map(name => name[0])
+      .join("");
+  })};
+
+  // const account1 = {
+  //   owner: 'Jonas Schmedtmann',　←ここのownerを指している
+  //   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  //   interestRate: 1.2, // 金利
+  //   pin: 1111,
+  // };
+
+//   const username =  user
+//     .toLowerCase()
+//     .split(" ")
+//     .map(name => name[0])
+//     .join("");
+//   return username
+// };
+
+// console.log(createUsernames('Steven Thomas Williams'));//stw結果は一緒。
+createUsernames(accounts);
+console.log(accounts); //ってやると、username でこれが見れるよ。
+
+
+//ここからスタート
+// const user = 'Steven Thomas Williams';//stwにしたい。
+// ➀const username = user.toLowerCase().split(" ");// ['steven', 'thomas', 'williams']となるsplitはそこで指定された値で区切ること。
+// ②const username = user
+//   .toLowerCase()
+//   .split(" ")
+//   .map(function(name){////mapはループするよね。だからそれを使った
+//     return name[0];//頭文字を取る。
+//   });
+// ;//(3) ['s', 't', 'w']ここまでやって、やっと頭文字が取れた
+// ③const username = user
+//   .toLowerCase()
+//   .split(" ")
+//   .map(name => name[0]) //そしてまたここをアロー関数に書き直す
+//   .join(""); //joinを使ってstwこうなりました。そしてこれをcreateusernameとして上に持っていった
+//
+// console.log(username);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -266,33 +315,32 @@ GOOD LUCK 😀
 //
 // }
 // checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
-
 //////////////////////////////////////////////////////////
 //150.The map METHODS
  //新しい配列を作成し、元の配列要素に、コールバック関数を適用した結果を返す。元の配列も変わらないよ。
 
- const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
- const eurToUsd = 1.1;
-//mapは関数を使っている
- // const movementsUsd = movements.map(function(mov){
- //   return mov * eurToUsd;
- //   // return 23;//これだと全部23と帰ってくる
- // })
-
-console.log(movements); //上の配列のやつ
-// console.log(movementsUsd);//movements配列に1.1を掛けたやつがここに新しい配列となって格納されている。
-
-//このように書くこともできる。こっちは単純に一つの配列をループして新しい配列を手動で作成している。同じことをやってるように見えて実はやってることは全然違う。
-const movementsUSDfor = [];//新しい配列を作る
-for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);//そこにpushをする感じね。forOf構文を使う
-console.log(movementsUSDfor);//結果はmapを使った時と全く一緒。
-
-//大嫌いなアロー関数です。きっと多くの人が嫌いだけど、アロー関数を理解していれば、短く書けるし便利だよ。
-const movementsUsd = movements.map (mov => mov * eurToUsd );
-console.log(movementsUsd);
-
-const movemetsDiscription =  movements.map((mov,i,arr) =>
-　`Movements ${i + 1}: You ${mov > 0 ? "deposit" : "withdrawal"} ${Math.abs(mov)}`
-);//三項演算子を使うと、こんな感じでもっと短く書くことができる
-console.log(movemetsDiscription);
+//  const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//
+//  const eurToUsd = 1.1;
+// //mapは関数を使っている
+//  // const movementsUsd = movements.map(function(mov){
+//  //   return mov * eurToUsd;
+//  //   // return 23;//これだと全部23と帰ってくる
+//  // })
+//
+// console.log(movements); //上の配列のやつ
+// // console.log(movementsUsd);//movements配列に1.1を掛けたやつがここに新しい配列となって格納されている。
+//
+// //このように書くこともできる。こっちは単純に一つの配列をループして新しい配列を手動で作成している。同じことをやってるように見えて実はやってることは全然違う。
+// const movementsUSDfor = [];//新しい配列を作る
+// for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);//そこにpushをする感じね。forOf構文を使う
+// console.log(movementsUSDfor);//結果はmapを使った時と全く一緒。
+//
+// //大嫌いなアロー関数です。きっと多くの人が嫌いだけど、アロー関数を理解していれば、短く書けるし便利だよ。
+// const movementsUsd = movements.map (mov => mov * eurToUsd );
+// console.log(movementsUsd);
+//
+// const movemetsDiscription =  movements.map((mov,i,arr) =>
+// 　`Movements ${i + 1}: You ${mov > 0 ? "deposit" : "withdrawal"} ${Math.abs(mov)}`
+// );//三項演算子を使うと、こんな感じでもっと短く書くことができる
+// console.log(movemetsDiscription);
