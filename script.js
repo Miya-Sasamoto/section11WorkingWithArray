@@ -78,9 +78,16 @@ const displayMovements = function(movements){ //必ずハードコーデイィ�
 }
 displayMovements(account1.movements);
 
+//lesson 153で追加。reduceメソッドのところで。
+const calcDisplayBalance = function(movemeonts){
+  const balance = movemeonts.reduce((acc,mov) => acc + mov,0);//大嫌いなアロー関数で綺麗にまとめた。第二引数忘れないで。
+  labelBalance.textContent = `${balance} EUR`;//これほんと便利ね。textContent.labelBalanceって反対にしちゃったから気をつけようね。ちなみにジョナスが全部上でまとめてくれたから。
+};
+
+calcDisplayBalance(account1.movements);
+
 //151. Computing Usernames でアカウントのユーザー名を作る
 //ここからスタートって書いてあるところから始めた。
-
 const createUsernames = function(accs){
   accs.forEach(function(acc){
     acc.username = acc.owner //このownerというのは下の。
@@ -107,7 +114,12 @@ const createUsernames = function(accs){
 
 // console.log(createUsernames('Steven Thomas Williams'));//stw結果は一緒。
 createUsernames(accounts);
-console.log(accounts); //ってやると、username でこれが見れるよ。
+// console.log(accounts); //ってやると、username でこれが見れるよ。
+
+
+
+
+
 
 
 //ここからスタート
@@ -347,19 +359,54 @@ GOOD LUCK 😀
 
 ///////////////////////////////////////////////////////
 //152. The filter Method
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//
+// const deposits =  movements.filter(function(mov){
+//   return mov > 0; //０以上の値だけがフィルタリングされて表示される。
+// });
+// console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// console.log(deposits);//(5) [200, 450, 3000, 70, 1300]だね。正の値だけ
+//
+// //やりたがるfor of ループでのやり方。ただ、メソッドを使う方が、配列と
+// const depositsFor = [];
+// for (const mov of movements)if (mov > 0)depositsFor.push(mov);
+// console.log(depositsFor); //これもさっきと結果は一緒。
+//
+// //アロー関数で書くとこんな感じです。
+// const withdrawal = movements.filter(mov => mov < 0 );
+// console.log(withdrawal);//(3) [-400, -650, -130]
+
+///////////////////////////////////////////////////////
+//153. The reduce Method 何かを全て集めたものを返す。雪だるま
+
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements);//8) [200, 450, -400, 3000, -650, -130, 70, 1300]
 
-const deposits =  movements.filter(function(mov){
-  return mov > 0; //０以上の値だけがフィルタリングされて表示される。
-});
-console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-console.log(deposits);//(5) [200, 450, 3000, 70, 1300]だね。正の値だけ
+//全ての値の合計をこのreduceメソッドを使って考えていきましょう。
+const balance = movements.reduce(function(acc,cur,i,arr){ //引数は、「今の値」「インデックス」「配列全体」しかし、reduceメソッドでは、最初の引数は「アキュムレーター」と呼ばれる。最終的に返したい値を積み重ねる雪だるまみたいな感じ。だから全体を足したりする場合は、それが合計になります。
+  console.log(`Iteration ${i+1}:${acc}`); //どんな感じか見れるね！
+  return acc + cur; //これを書くことで、どんどん積み重なっていく。accは積み重なった合計で、それにcurが追加されていく感じね。
+},0);//そしてreduceメソッドには第二引数があり、それには初期値を設定する。0から足し算してくから、ここでは0になるよ。
 
-//やりたがるfor of ループでのやり方。ただ、メソッドを使う方が、配列と
-const depositsFor = [];
-for (const mov of movements)if (mov > 0)depositsFor.push(mov);
-console.log(depositsFor); //これもさっきと結果は一緒。
+console.log(balance); //3840と出るよ！成功！！
 
-//アロー関数で書くとこんな感じです。
-const withdrawal = movements.filter(mov => mov < 0 );
-console.log(withdrawal);//(3) [-400, -650, -130]
+let balance2 = 0; //外部変数として、変更可能なletで初期値を0としてbalance2を設定forofループ文を使うときは、必ず外部変数が必要になります。
+for (const mov of movements)balance2 += mov;//今の値とmovementsを足していく。forofループ構文で同じものができました。
+console.log(balance2);///3840と出る.]
+
+//大っ嫌いなアロー関数を使って書くやり方です。
+const balance3 = movements.reduce((acc,cur) => acc + cur,0);
+console.log(balance3);//3840
+//確かに短くていいんだけど、ちょっと嫌いなアロー関数
+
+//reduceメソッドを使って、他のこともできるよーーーん。配列の最大値を取得してみよーう。
+//配列をループさせて、比較、比較、比較、でどんどん先に進んでみよーう。
+//いつもいつも、雪だるまのaccは何に使われるのかが問題になります。足し算の時は、普通に雪だるまちゃんでよかったけど、今回は別に足すものもないしどうすればいいわけ？ ここでは、accが現在の最大値を把握するのです。
+const max = movements.reduce((acc,mov) => {
+  if(acc > mov){
+    return acc;
+  } else {
+    return mov; //movが一番おっきいことになるから、こうやって書くんだよ。
+  }
+},movements[0]);//第二引数ですが、0とかから始めないで、配列の先頭を指定するようにしましょう。
+console.log(max);//3000　期待値！やったね！
