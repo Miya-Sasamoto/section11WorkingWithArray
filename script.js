@@ -70,7 +70,7 @@ const displayMovements = function(movements){ //必ずハードコーデイィ�
      const html = `
        <div class="movements__row">
          <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-         <div class="movements__value"> ${mov}</div>
+         <div class="movements__value"> ${mov}€</div>
        </div>
      `; //こんな感じで使えるから、テンプレートリテラルはめっちゃ便利。typeはそれによって、cssが変わるから、クラス名に入れることもできる。インデックスは+1するのは０ベースだからね。
      containerMovements.insertAdjacentHTML("afterbegin",html);//これが結構新しい概念かも。containerMovementsは上にグローバル関数が作られている。insertAdjacentHTMLっていうのは、それをhtml上に表示させるためのやり方。afterbeginがbeforeendをよく使うんだけど、afterbeginだと新しい情報が上から降りてくる感じ。
@@ -85,6 +85,31 @@ const calcDisplayBalance = function(movemeonts){
 };
 
 calcDisplayBalance(account1.movements);
+
+
+const calcDisplaySummary = function(movements){
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc,mov)=> acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const outcomes = movements
+    .filter(mov => mov < 0)
+    .reduce((acc,mov)=> acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(outcomes)}€`; //Math.absは絶対値のabslutly
+
+  const interest = movements //利息は預け入れの金額に対して1.2％の利子がつく計算らしい。
+    .filter(mov => mov > 0)
+    .map(deposit => deposit * 1.2/100) //1.2/100これが1.2%を表すやり方。1.2を100で悪らしいです。
+    .filter((int,i,arr) =>{
+      console.log(arr);//(5) [2.4, 5.4, 36, 0.84, 15.6]となる。4つ目は１より小さいよね。
+      return int >= 1; //利子が１より小さい場合は除外するらしい。
+    })
+    .reduce((acc,int) => acc + int ,0) ;
+    labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements);
 
 //151. Computing Usernames でアカウントのユーザー名を作る
 //ここからスタートって書いてあるところから始めた。
@@ -378,38 +403,38 @@ GOOD LUCK 😀
 
 ///////////////////////////////////////////////////////
 //153. The reduce Method 何かを全て集めたものを返す。雪だるま
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-console.log(movements);//8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-
-//全ての値の合計をこのreduceメソッドを使って考えていきましょう。
-const balance = movements.reduce(function(acc,cur,i,arr){ //引数は、「今の値」「インデックス」「配列全体」しかし、reduceメソッドでは、最初の引数は「アキュムレーター」と呼ばれる。最終的に返したい値を積み重ねる雪だるまみたいな感じ。だから全体を足したりする場合は、それが合計になります。
-  console.log(`Iteration ${i+1}:${acc}`); //どんな感じか見れるね！
-  return acc + cur; //これを書くことで、どんどん積み重なっていく。accは積み重なった合計で、それにcurが追加されていく感じね。
-},0);//そしてreduceメソッドには第二引数があり、それには初期値を設定する。0から足し算してくから、ここでは0になるよ。
-
-console.log(balance); //3840と出るよ！成功！！
-
-let balance2 = 0; //外部変数として、変更可能なletで初期値を0としてbalance2を設定forofループ文を使うときは、必ず外部変数が必要になります。
-for (const mov of movements)balance2 += mov;//今の値とmovementsを足していく。forofループ構文で同じものができました。
-console.log(balance2);///3840と出る.]
-
-//大っ嫌いなアロー関数を使って書くやり方です。
-const balance3 = movements.reduce((acc,cur) => acc + cur,0);
-console.log(balance3);//3840
-//確かに短くていいんだけど、ちょっと嫌いなアロー関数
-
-//reduceメソッドを使って、他のこともできるよーーーん。配列の最大値を取得してみよーう。
-//配列をループさせて、比較、比較、比較、でどんどん先に進んでみよーう。
-//いつもいつも、雪だるまのaccは何に使われるのかが問題になります。足し算の時は、普通に雪だるまちゃんでよかったけど、今回は別に足すものもないしどうすればいいわけ？ ここでは、accが現在の最大値を把握するのです。
-const max = movements.reduce((acc,mov) => {
-  if(acc > mov){
-    return acc;
-  } else {
-    return mov; //movが一番おっきいことになるから、こうやって書くんだよ。
-  }
-},movements[0]);//第二引数ですが、0とかから始めないで、配列の先頭を指定するようにしましょう。
-console.log(max);//3000　期待値！やったね！
+//
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);//8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+//
+// //全ての値の合計をこのreduceメソッドを使って考えていきましょう。
+// const balance = movements.reduce(function(acc,cur,i,arr){ //引数は、「今の値」「インデックス」「配列全体」しかし、reduceメソッドでは、最初の引数は「アキュムレーター」と呼ばれる。最終的に返したい値を積み重ねる雪だるまみたいな感じ。だから全体を足したりする場合は、それが合計になります。
+//   console.log(`Iteration ${i+1}:${acc}`); //どんな感じか見れるね！
+//   return acc + cur; //これを書くことで、どんどん積み重なっていく。accは積み重なった合計で、それにcurが追加されていく感じね。
+// },0);//そしてreduceメソッドには第二引数があり、それには初期値を設定する。0から足し算してくから、ここでは0になるよ。
+//
+// console.log(balance); //3840と出るよ！成功！！
+//
+// let balance2 = 0; //外部変数として、変更可能なletで初期値を0としてbalance2を設定forofループ文を使うときは、必ず外部変数が必要になります。
+// for (const mov of movements)balance2 += mov;//今の値とmovementsを足していく。forofループ構文で同じものができました。
+// console.log(balance2);///3840と出る.]
+//
+// //大っ嫌いなアロー関数を使って書くやり方です。
+// const balance3 = movements.reduce((acc,cur) => acc + cur,0);
+// console.log(balance3);//3840
+// //確かに短くていいんだけど、ちょっと嫌いなアロー関数
+//
+// //reduceメソッドを使って、他のこともできるよーーーん。配列の最大値を取得してみよーう。
+// //配列をループさせて、比較、比較、比較、でどんどん先に進んでみよーう。
+// //いつもいつも、雪だるまのaccは何に使われるのかが問題になります。足し算の時は、普通に雪だるまちゃんでよかったけど、今回は別に足すものもないしどうすればいいわけ？ ここでは、accが現在の最大値を把握するのです。
+// const max = movements.reduce((acc,mov) => {
+//   if(acc > mov){
+//     return acc;
+//   } else {
+//     return mov; //movが一番おっきいことになるから、こうやって書くんだよ。
+//   }
+// },movements[0]);//第二引数ですが、0とかから始めないで、配列の先頭を指定するようにしましょう。
+// console.log(max);//3000　期待値！やったね！
 
 ///////////////////////////////////////
 // Coding Challenge #2
@@ -439,25 +464,42 @@ GOOD LUCK 😀
 // }
 //てな感じで、全部繋げる感じで書いてしまった私。以下先生のお手本
 
-const calcAverageHumanAge2 = function(ages){
-  const humanAges = ages.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
-  const adults  = humanAges.filter(age => age >= 18);
-
-  console.log(humanAges);
-  console.log(adults);
-
-  const average = adults.reduce((acc, age) => acc + age,0) / adults.length;//平均の出し方。全部をまとめてやるんだね。　
-
-
-  return average;
-}
-
-const avg1 = calcAverageHumanAge2( [5, 2, 4, 1, 15, 8, 3]);//忘れがちだけど、ここでまた作ることが大事。
-const avg2 = calcAverageHumanAge2(  [16, 6, 10, 5, 6, 1, 4]);
-
-console.log(avg1);
-console.log(avg2);
-
+// const calcAverageHumanAge2 = function(ages){
+//   const humanAges = ages.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
+//   const adults  = humanAges.filter(age => age >= 18);
+//
+//   console.log(humanAges);
+//   console.log(adults);
+//
+//   const average = adults.reduce((acc, age) => acc + age,0) / adults.length;//平均の出し方。全部をまとめてやるんだね。　
+//
+//
+//   return average;
+// }
+//
+// const avg1 = calcAverageHumanAge2( [5, 2, 4, 1, 15, 8, 3]);//忘れがちだけど、ここでまた作ることが大事。
+// const avg2 = calcAverageHumanAge2(  [16, 6, 10, 5, 6, 1, 4]);
+//
+// console.log(avg1);
+// console.log(avg2);
+//
 
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 // calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]);
+
+//155. The Magic of Chaining Methods
+//例えば、全ての入金額を、ユーロからドルに勘案して、最後にそれらを合計して、アメリカドルで口座にn入金された金額を正確に知ることができるとする。
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const eurToUsd = 1.1;
+
+const totalDespositsUSD =
+  movements
+    .filter(mov => mov > 0) //これが預金です（EURの）
+    .map(mov => mov * eurToUsd) //EURからUSDに変換
+    .reduce((acc,mov) => acc + mov,0); //それを全て合計して足していく。まじでこの第二引数忘れないでね。
+  //このコースの趣旨は、全てをチェーンみたいに繋げて書くことができますよ。ということです。
+  //でもこのように一つにつなげて書くと、バグが怒った場合、デバッグするのが難しくなりますね。どこからきたのかわからなくなります。
+
+console.log(totalDespositsUSD);//5522.000000000001となる。
+//それではここで勉強したことを、画面に表してみましょう↑
