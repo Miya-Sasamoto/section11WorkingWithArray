@@ -490,18 +490,18 @@ GOOD LUCK 😀
 //155. The Magic of Chaining Methods
 //例えば、全ての入金額を、ユーロからドルに勘案して、最後にそれらを合計して、アメリカドルで口座にn入金された金額を正確に知ることができるとする。
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-const eurToUsd = 1.1;
-
-const totalDespositsUSD =
-  movements
-    .filter(mov => mov > 0) //これが預金です（EURの）
-    .map(mov => mov * eurToUsd) //EURからUSDに変換
-    .reduce((acc,mov) => acc + mov,0); //それを全て合計して足していく。まじでこの第二引数忘れないでね。
-  //このコースの趣旨は、全てをチェーンみたいに繋げて書くことができますよ。ということです。
-  //でもこのように一つにつなげて書くと、バグが怒った場合、デバッグするのが難しくなりますね。どこからきたのかわからなくなります。
-
-console.log(totalDespositsUSD);//5522.000000000001となる。
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const eurToUsd = 1.1;
+//
+// const totalDespositsUSD =
+//   movements
+//     .filter(mov => mov > 0) //これが預金です（EURの）
+//     .map(mov => mov * eurToUsd) //EURからUSDに変換
+//     .reduce((acc,mov) => acc + mov,0); //それを全て合計して足していく。まじでこの第二引数忘れないでね。
+//   //このコースの趣旨は、全てをチェーンみたいに繋げて書くことができますよ。ということです。
+//   //でもこのように一つにつなげて書くと、バグが怒った場合、デバッグするのが難しくなりますね。どこからきたのかわからなくなります。
+//
+// console.log(totalDespositsUSD);//5522.000000000001となる。
 //それではここで勉強したことを、画面に表してみましょう↑
 
 ///////////////////////////////////////
@@ -527,12 +527,30 @@ GOOD LUCK 😀
 //
 //   return average;
 // }
-const ages =  [5, 2, 4, 1, 15, 8, 3];
+// const ages =  [5, 2, 4, 1, 15, 8, 3];
+//
+// const calcAverageHumanAge =
+//   ages
+//     .map(age => (age <= 2 ? age * 2 : 16 + age * 4))
+//     .filter(age => age >= 18)
+//     .reduce((acc,age)=> acc + age,0)/ ages.length;
+//
+// console.log(calcAverageHumanAge);
 
-const calcAverageHumanAge =
-  ages
-    .map(age => (age <= 2 ? age * 2 : 16 + age * 4))
-    .filter(age => age >= 18)
-    .reduce((acc,age)=> acc + age,0)/ ages.length;
+///////////////////////////////////////
+// 157,The find method
+//条件に基づき、配列の一つの要素を取り出すことができる。
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-console.log(calcAverageHumanAge);
+const firstWithdrawal =  movements.find(mov => mov < 0);
+console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(firstWithdrawal); //-400と表示される。配列の最初の値。
+//「条件に合致するものを抽出する」という点では、filterと似ているけれど、根本的に違うところが2つある。
+//1,filterは条件に合致するものを全て返却するのに対し、findは最初の一つだけを返却
+//2,filterは新しい「配列」を返却するが、findは要素そのものを返す
+
+console.log(accounts); //上に定義してある、4人分のアカウントが保持されている
+const account = accounts.find(acc =>
+  acc.owner === "Jessica Davis"); //こうすることで、ownerがこの人の名前のやつだけピックアップされる。
+console.log(account);
+//なんかこれだったら部tにfilterでいいんじゃないかって思ってしまいますが、、その要素を満たすのは一つだけの要素、という条件を設定することが多いらしいです。だかあ===の等号演算子を使っていたわけです
