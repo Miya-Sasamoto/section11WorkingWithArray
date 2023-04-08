@@ -76,7 +76,7 @@ const displayMovements = function(movements){ //必ずハードコーデイィ�
      containerMovements.insertAdjacentHTML("afterbegin",html);//これが結構新しい概念かも。containerMovementsは上にグローバル関数が作られている。insertAdjacentHTMLっていうのは、それをhtml上に表示させるためのやり方。afterbeginがbeforeendをよく使うんだけど、afterbeginだと新しい情報が上から降りてくる感じ。
   })
 }
-displayMovements(account1.movements);
+// displayMovements(account1.movements);これはハードコーディングされているので消します。
 
 //lesson 153で追加。reduceメソッドのところで。
 const calcDisplayBalance = function(movemeonts){
@@ -84,23 +84,23 @@ const calcDisplayBalance = function(movemeonts){
   labelBalance.textContent = `${balance} EUR`;//これほんと便利ね。textContent.labelBalanceって反対にしちゃったから気をつけようね。ちなみにジョナスが全部上でまとめてくれたから。
 };
 
-calcDisplayBalance(account1.movements);
+// calcDisplayBalance(account1.movements);これはハードコーディングされているので消します。
 
 
-const calcDisplaySummary = function(movements){
-  const incomes = movements
+const calcDisplaySummary = function(acc){
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc,mov)=> acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const outcomes = movements
+  const outcomes = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc,mov)=> acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(outcomes)}€`; //Math.absは絶対値のabslutly
 
-  const interest = movements //利息は預け入れの金額に対して1.2％の利子がつく計算らしい。
+  const interest = acc.movements //利息は預け入れの金額に対して1.2％の利子がつく計算らしい。
     .filter(mov => mov > 0)
-    .map(deposit => deposit * 1.2/100) //1.2/100これが1.2%を表すやり方。1.2を100で悪らしいです。
+    .map(deposit => deposit * acc.interestRate/100) //1.2/100これが1.2%を表すやり方。1.2を100で悪らしいです。
     .filter((int,i,arr) =>{
       console.log(arr);//(5) [2.4, 5.4, 36, 0.84, 15.6]となる。4つ目は１より小さいよね。
       return int >= 1; //利子が１より小さい場合は除外するらしい。
@@ -109,7 +109,7 @@ const calcDisplaySummary = function(movements){
     labelSumInterest.textContent = `${interest}€`;
 };
 
-calcDisplaySummary(account1.movements);
+// calcDisplaySummary(account1.movements);これはハードコーディングされているので消します。
 
 //151. Computing Usernames でアカウントのユーザー名を作る
 //ここからスタートって書いてあるところから始めた。
@@ -141,8 +141,53 @@ const createUsernames = function(accs){
 createUsernames(accounts);
 // console.log(accounts); //ってやると、username でこれが見れるよ。
 
+// //Event handlers
 
+// btnLogin.addEventListener("click",function(){
+//   console.log("LOGIN");
+// }) //実はこのままだと、ログインのボタンを押すと、ほんの一瞬だけコンソールにログが表示されてすぐにリロードされてしまう。
+//この理由はformの中のボタン要素だからです。これがデフォルトの動きです。
+//↓↓↓
+//以下がデフォルトを無効にしてやり直した書き方。
 
+let currentAccount; //この値はこのあと何度も使うから、letでしかも外部で宣言をする。
+
+btnLogin.addEventListener("click",function(e){
+  //フォームが送信されないようにする。preventDefaultは規定のアクションを通常通りに行うべきではないことを伝える。
+  e.preventDefault();
+  console.log("LOGIN");
+//currentAccountはここで。letで外部宣言しているからconstはいらないよ。
+//ここからはユーザー名があっているかの確認です。
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value); //入力されたusernameと等しいことを確認する。そしてvalueを忘れないで。入力フィールだから値を読み込むためには必要です。acc.usernameなのは、上のcreateUsernamesで頭文字をとって作成する関数を作っているからだよ。
+console.log(currentAccount);//自分のやつがあっているか確かめよう。
+
+//ここからはpinと等しいかを確認するところ。
+if(currentAccount?.pin === Number(inputLoginPin.value)){ //どうしてnumberを付けるかというと、valueは常に文字列になるため。pinは数字だったよね。
+  //もしここでユーザー名を空欄にしたり間違ったやつを売ったり、pinを打たないとエラーが出ますよ。ではそのエラーをどのように解消すればいいのか。
+  //まず思いつくのは、そのアカウントが存在するかを確かめること。オプショナル・チェーンを使おう
+  //「?.」この演算子すっかり忘れていたけど何これ。調べました。
+  //nullやundefinedの時にエラーになるのではなく、式が短略され、undefinedだけが返されるところ。エラーになったらいちいちめんどくさいしね。
+  // console.log("PIN LOGIN");
+  // welcome message
+   labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(" ")[0]}`;
+   //ログインすると、上のメッセージ部分がこのようになる。いくらやっても覚えられあいね、splitはそこで指定された文字で区切ること。その０番目だから最初の名前だけ表示されるんだね。miyaとかjonasとか名前だけ。
+   //ここでログインができてから下に口座の動きが見えてくるんだよね。
+   containerApp.style.opacity = 100; //ここで透明度の操作をする。
+   //このcontainerAppとはクラス名にappがついているものを指定する。cssでopacityを変化させることのクラス名はappだった。天才！
+//すごくて天才かと思った
+//それでは次に、ログインをした後に、ユーザー名のところとpinのところを空にするやり方をやります。
+  inputLoginUsername.value = inputLoginPin.value = ""; //これで空になりました。value忘れないで！
+  //pinのところに残っているカーソルのフォーカスを外すやり方。
+  inputLoginPin.blur();//blur()とは⇨フォーカスを当てている状態から外したタイミングで実行されるイベントです。
+  //movementsを表示
+  displayMovements(currentAccount.movements);//そのアカウントのmovementsを計算するところ。左側に.縦にスクロールするところ。
+  //残高を表示
+  calcDisplayBalance(currentAccount.movements);//右上にある合計の金額を計算するところ。movementsを全部足し引きするところ
+  //サマリーを表示
+  calcDisplaySummary(currentAccount); //下に書いてある、合計とか金利とかを計算するところ
+}
+
+}) //form要素のいいところは、入力してエンターキーを押すと実際にそのクリックイベントが自動的に紐付くこと。自分でclickを書く必要がないところは楽でいいと思います。
 
 
 
@@ -540,17 +585,17 @@ GOOD LUCK 😀
 ///////////////////////////////////////
 // 157,The find method
 //条件に基づき、配列の一つの要素を取り出すことができる。
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-const firstWithdrawal =  movements.find(mov => mov < 0);
-console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-console.log(firstWithdrawal); //-400と表示される。配列の最初の値。
-//「条件に合致するものを抽出する」という点では、filterと似ているけれど、根本的に違うところが2つある。
-//1,filterは条件に合致するものを全て返却するのに対し、findは最初の一つだけを返却
-//2,filterは新しい「配列」を返却するが、findは要素そのものを返す
-
-console.log(accounts); //上に定義してある、4人分のアカウントが保持されている
-const account = accounts.find(acc =>
-  acc.owner === "Jessica Davis"); //こうすることで、ownerがこの人の名前のやつだけピックアップされる。
-console.log(account);
-//なんかこれだったら部tにfilterでいいんじゃないかって思ってしまいますが、、その要素を満たすのは一つだけの要素、という条件を設定することが多いらしいです。だかあ===の等号演算子を使っていたわけです
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//
+// const firstWithdrawal =  movements.find(mov => mov < 0);
+// console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// console.log(firstWithdrawal); //-400と表示される。配列の最初の値。
+// //「条件に合致するものを抽出する」という点では、filterと似ているけれど、根本的に違うところが2つある。
+// //1,filterは条件に合致するものを全て返却するのに対し、findは最初の一つだけを返却
+// //2,filterは新しい「配列」を返却するが、findは要素そのものを返す
+//
+// console.log(accounts); //上に定義してある、4人分のアカウントが保持されている
+// const account = accounts.find(acc =>
+//   acc.owner === "Jessica Davis"); //こうすることで、ownerがこの人の名前のやつだけピックアップされる。
+// console.log(account);
+// //なんかこれだったら部tにfilterでいいんじゃないかって思ってしまいますが、、その要素を満たすのは一つだけの要素、という条件を設定することが多いらしいです。だかあ===の等号演算子を使っていたわけです
