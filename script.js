@@ -224,6 +224,27 @@ btnTransfer.addEventListener("click",function(e){
 })
 
 
+btnClose.addEventListener("click",function(e){
+    e.preventDefault(); //デフォルトの動きを抑制
+    // console.log("Click! YAAAAS");
+    if(
+      inputCloseUsername.value === currentAccount.username & //close account のところに入力されたアカウント名が一致
+      Number(inputClosePin.value) === currentAccount.pin　//close account のところに入力されたpinが一致
+    ){
+      const index = accounts.findIndex(acc => acc.username === currentAccount.username);//findIndexはfindと似ているけど、要素のindexを返すんだよ。これなんかindexOfに似ていない？
+      console.log(index); //これは入力された値がaccounts配列の何番目の要素かを出してくれる。もしこれがjs,1111だったら、account配列の最初だから、ログは0と表示される。
+      //これがindexOFと似ている件についてですが、indexOFは配列の中にある値しか検索できないこと。複雑な条件を作る場合は、indexOfではなく、findIndexを使う必要があります。
+
+      //アカウント削除
+      accounts.splice(index,1);//spliceは元の配列も変えてしなうから、この結果をどこかに保存しておく必要はないです。これでちゃんと消えました。（もちろんリロードしたらいけるよ）
+
+      //画面を白く戻す
+      containerApp.style.opacity = 0;
+    }
+
+    inputCloseUsername.vaue = inputClosePin.value = ""; //まぁ見えないんだけど、ここで入力したところを空にするわけです。
+});
+
 //ここからスタート
 // const user = 'Steven Thomas Williams';//stwにしたい。
 // ➀const username = user.toLowerCase().split(" ");// ['steven', 'thomas', 'williams']となるsplitはそこで指定された値で区切ること。
