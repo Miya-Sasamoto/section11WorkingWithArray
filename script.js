@@ -78,31 +78,32 @@ const displayMovements = function(movements){ //必ずハードコーデイィ�
 }
 // displayMovements(account1.movements);これはハードコーディングされているので消します。
 
-//lesson 153で追加。reduceメソッドのところで。
-const calcDisplayBalance = function(movemeonts){
-  const balance = movemeonts.reduce((acc,mov) => acc + mov,0);//大嫌いなアロー関数で綺麗にまとめた。第二引数忘れないで。
-  labelBalance.textContent = `${balance} EUR`;//これほんと便利ね。textContent.labelBalanceって反対にしちゃったから気をつけようね。ちなみにジョナスが全部上でまとめてくれたから。
+//lesson 153で追加。reduceメソッドのところで。残高計算するところ
+const calcDisplayBalance = function(acc){ //配列全体を渡すように修正した。
+  acc.balance = acc.movements.reduce((acc,mov) => acc + mov,0);//大嫌いなアロー関数で綺麗にまとめた。第二引数忘れないで
+  //いちいちbalanceに閉じ込めないで、ここでそのままプロパティを取得でき料に修正。
+  labelBalance.textContent = `${acc.balance} EUR`;//これほんと便利ね。textContent.labelBalanceって反対にしちゃったから気をつけようね。ちなみにジョナスが全部上でまとめてくれたから。アカウント全体を渡すようにしたからここでおacc.って書くの忘れないでね。
 };
 
 // calcDisplayBalance(account1.movements);これはハードコーディングされているので消します。
 
-
-const calcDisplaySummary = function(acc){
-  const incomes = acc.movements
+//実はアカウントによって金利が違うんです。だからそれを書き直しました。
+const calcDisplaySummary = function(acc){//アカウント全体を渡している
+  const incomes = acc.movements　//アカウントのうちのmovementsを使う
     .filter(mov => mov > 0)
     .reduce((acc,mov)=> acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const outcomes = acc.movements
+  const outcomes = acc.movements　//アカウントのうちのmovementsを使う
     .filter(mov => mov < 0)
     .reduce((acc,mov)=> acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(outcomes)}€`; //Math.absは絶対値のabslutly
 
   const interest = acc.movements //利息は預け入れの金額に対して1.2％の利子がつく計算らしい。
     .filter(mov => mov > 0)
-    .map(deposit => deposit * acc.interestRate/100) //1.2/100これが1.2%を表すやり方。1.2を100で悪らしいです。
+    .map(deposit => deposit * acc.interestRate/100) ////アカウントのinterestRateを使って計算する
     .filter((int,i,arr) =>{
-      console.log(arr);//(5) [2.4, 5.4, 36, 0.84, 15.6]となる。4つ目は１より小さいよね。
+      // console.log(arr);//(5) [2.4, 5.4, 36, 0.84, 15.6]となる。4つ目は１より小さいよね。
       return int >= 1; //利子が１より小さい場合は除外するらしい。
     })
     .reduce((acc,int) => acc + int ,0) ;
@@ -140,6 +141,15 @@ const createUsernames = function(accs){
 // console.log(createUsernames('Steven Thomas Williams'));//stw結果は一緒。
 createUsernames(accounts);
 // console.log(accounts); //ってやると、username でこれが見れるよ。
+
+const updateUI = function(acc){ //一つの関数にまとめる。引数はaccountのaccにすればオッケーよ
+  //それぞれのアカウントのお金の流れを、スクロールするところに表示させる
+  displayMovements(acc.movements);
+  //右上に全ての預金動きを合計して表示させる
+  calcDisplayBalance(acc);
+  //下にそれぞれの合計や、金利などを表示させる。
+  calcDisplaySummary(acc);
+}
 
 // //Event handlers
 
@@ -179,17 +189,39 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){ //どうしてnumberを
   inputLoginUsername.value = inputLoginPin.value = ""; //これで空になりました。value忘れないで！
   //pinのところに残っているカーソルのフォーカスを外すやり方。
   inputLoginPin.blur();//blur()とは⇨フォーカスを当てている状態から外したタイミングで実行されるイベントです。
-  //movementsを表示
-  displayMovements(currentAccount.movements);//そのアカウントのmovementsを計算するところ。左側に.縦にスクロールするところ。
-  //残高を表示
-  calcDisplayBalance(currentAccount.movements);//右上にある合計の金額を計算するところ。movementsを全部足し引きするところ
-  //サマリーを表示
-  calcDisplaySummary(currentAccount); //下に書いてある、合計とか金利とかを計算するところ
+
+  updateUI(currentAccount); //今まではここに案数を一つ一つ書いていたけど,updateUIという一つの関数にまとめて、それを呼び出す形にしたのだ。
+
 }
 
-}) //form要素のいいところは、入力してエンターキーを押すと実際にそのクリックイベントが自動的に紐付くこと。自分でclickを書く必要がないところは楽でいいと思います。
+}); //form要素のいいところは、入力してエンターキーを押すと実際にそのクリックイベントが自動的に紐付くこと。自分でclickを書く必要がないところは楽でいいと思います。
 
+//他のユーザーへの送金ができますので、ここで実装していきます。右側にある黄色いところです。
+btnTransfer.addEventListener("click",function(e){
+  e.preventDefault(); //デフォルトの操作を制御する。さっきもやったね
 
+  const amount = Number(inputTransferAmount.value);//要素を見るとinputTransferAmountは金額を入力するところなので、numberを入れます。いつものことですが、valueも忘れないでください。
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+  //ここは少しややこしいけど、金額の送付先を入れるので、accountsの全てのアカウントの配列から探す、として、accountsのusernameが送金先のアカウント名と一致しているかを===の等号演算子で確認をしています。
+  console.log(amount,receiverAcc);//これで入力された送金金額と、送金先の受け取りユーザーがちゃんとあっているかを確認します。。
+  //それに、自分の持っているお金よりも高い金額は振り込めないですよね。だからそこもチェックします。それに送る金額はネガティブになってはダメです。
+
+  inputTransferAmount.value = inputTransferTo.value = "";
+
+  if (
+    amount > 0 &&  //送る金額が0円以上か
+    receiverAcc &&//送る相手が存在するかどうか。存在するアカウントに送らないといけないからね。
+    currentAccount.balance >= amount && //送り元の 預金が送る金額よりも上か
+    receiverAcc?.username !== currentAccount.username)//オプチョナルチェーンを使って、receiverAccがぞんざいするときにって感じ
+  {
+    // console.log("Trnsfer valid");//これは確認ようにやっているんだけど、自分の預金額よりも多い数だと、これはログに表示されないよ
+
+    //そうしたら、これを送ったユーザーは預金が減って、受け取ったユーザーの預金が増えることは当たり前ですよね。
+    currentAccount.movements.push(-amount); //-だからここで数が減ってます
+    receiverAcc.movements.push(amount); //pushをするので、movementsの配列に後ろから付け足すイメージです
+    updateUI(currentAccount); //変更になりましたから、ここでももう一回関数を読んで表示させないとですね。さすがです
+  }
+})
 
 
 //ここからスタート
