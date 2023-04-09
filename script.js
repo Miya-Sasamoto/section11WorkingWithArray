@@ -223,6 +223,25 @@ btnTransfer.addEventListener("click",function(e){
   }
 })
 
+//Request Loan のところ。融資依頼
+//「融資希望額の10%以上の預金が一つ以上ないと融資しない」というルールになっている。
+btnLoan.addEventListener("click",function(e){
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if(
+    amount > 0 && //融資希望額が0円以上で、
+    currentAccount.movements.some(mov => mov >= amount * 0.1)//現在のアカウントのムーブのなかに融資希望額の10%以上の学があれば
+  ){
+    //ムーブメントに動きを足す
+    currentAccount.movements.push(amount); //ムーブメントのところに追加
+
+    updateUI(currentAccount);//一つの関数にまとめたね。下の3つの動きをこれでまとめて動かしている
+  }
+  inputLoanAmount.value = "";  //入力したとことをこれで空にしている
+
+})
 
 btnClose.addEventListener("click",function(e){
     e.preventDefault(); //デフォルトの動きを抑制
@@ -652,3 +671,29 @@ GOOD LUCK 😀
 //   acc.owner === "Jessica Davis"); //こうすることで、ownerがこの人の名前のやつだけピックアップされる。
 // console.log(account);
 // //なんかこれだったら部tにfilterでいいんじゃないかって思ってしまいますが、、その要素を満たすのは一つだけの要素、という条件を設定することが多いらしいです。だかあ===の等号演算子を使っていたわけです
+
+///161 some and every
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(movements.includes(-130));//true配列の中にあるからtrueと表示される
+//includesだと、入っているか否かのテストですが、もし条件をテストしたい場合はどうすればいいでしょうか・
+
+console.log(movements.some(mov => mov === -130));//trus さっきのincludesをsomeメソッドに書き換えてみた。
+
+//この口座に入金があったかを調べたいとします。つまり、配列に正の数字の動きがあるかどうかを知りたいのです。0以上ならなんでもいい。
+
+const anyDeposits = movements.some(mov => mov > 0); //ようやくアロー関数にも慣れてきました。
+console.log(anyDeposits); //true
+
+const anyDeposits2 = movements.some(mov => mov > 5000);
+console.log(anyDeposits2); //false
+
+//someメソッドと似ているeveryについて見てみましょう
+//配列の全てがこの条件に合致した場合にtrueを返す。名前通りだね。
+console.log(movements.every(mov => mov > 0)); //false
+console.log(account4.movements.every(mov => mov > 0)); //true
+//acount4のmoveは全てポジティブなんです　
+
+//separate callback
+const deposit = mov => mov > 0; //ここで関数にしておいて
+console.log(movements.some(deposit));//ここでその関数を呼ぶ方法がスマートかもね。
