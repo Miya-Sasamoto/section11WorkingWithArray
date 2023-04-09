@@ -673,27 +673,67 @@ GOOD LUCK 😀
 // //なんかこれだったら部tにfilterでいいんじゃないかって思ってしまいますが、、その要素を満たすのは一つだけの要素、という条件を設定することが多いらしいです。だかあ===の等号演算子を使っていたわけです
 
 ///161 some and every
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-console.log(movements.includes(-130));//true配列の中にあるからtrueと表示される
-//includesだと、入っているか否かのテストですが、もし条件をテストしたい場合はどうすればいいでしょうか・
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);//(8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// console.log(movements.includes(-130));//true配列の中にあるからtrueと表示される
+// //includesだと、入っているか否かのテストですが、もし条件をテストしたい場合はどうすればいいでしょうか・
+//
+// console.log(movements.some(mov => mov === -130));//trus さっきのincludesをsomeメソッドに書き換えてみた。
+//
+// //この口座に入金があったかを調べたいとします。つまり、配列に正の数字の動きがあるかどうかを知りたいのです。0以上ならなんでもいい。
+//
+// const anyDeposits = movements.some(mov => mov > 0); //ようやくアロー関数にも慣れてきました。
+// console.log(anyDeposits); //true
+//
+// const anyDeposits2 = movements.some(mov => mov > 5000);
+// console.log(anyDeposits2); //false
+//
+// //someメソッドと似ているeveryについて見てみましょう
+// //配列の全てがこの条件に合致した場合にtrueを返す。名前通りだね。
+// console.log(movements.every(mov => mov > 0)); //false
+// console.log(account4.movements.every(mov => mov > 0)); //true
+// //acount4のmoveは全てポジティブなんです　
+//
+// //separate callback
+// const deposit = mov => mov > 0; //ここで関数にしておいて
+// console.log(movements.some(deposit));//ここでその関数を呼ぶ方法がスマートかもね。
 
-console.log(movements.some(mov => mov === -130));//trus さっきのincludesをsomeメソッドに書き換えてみた。
+//162,flat and flatMap
+const  arr = [[1,2,3],[4,5,6],7,8];
+console.log(arr.flat()); //(8) [1, 2, 3, 4, 5, 6, 7, 8]となる。全てが一つの配列になる
+//めちゃめちゃシンプル、コールバック関数もない。全ての要素を、再帰的に結合した新しい配列を作ります。
 
-//この口座に入金があったかを調べたいとします。つまり、配列に正の数字の動きがあるかどうかを知りたいのです。0以上ならなんでもいい。
+const arrDeep = [[[1,2],3],[4,[5,6]],7,8];
+console.log(arrDeep.flat());//6) [Array(2), 3, 4, Array(2), 7, 8]となるということは1階層文しか進めないということです　
 
-const anyDeposits = movements.some(mov => mov > 0); //ようやくアロー関数にも慣れてきました。
-console.log(anyDeposits); //true
+const arrDeep2 = [[[1,2],3],[4,[5,6]],7,8];//これ、上と一緒ね。
+console.log(arrDeep2.flat(2));//(8) [1, 2, 3, 4, 5, 6, 7, 8]　深度の調整ができる。デフォルトは１。マックス２。
+//
+// const accountMovements = accounts.map(acc => acc.movements);//mapだkら、accpuntsのmovementsを全て返すようにする
+// console.log(accountMovements);
+// //(4) [Array(8), Array(8), Array(8), Array(5)]
+// // 0: (8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// // 1: (8) [5000, 3400, -150, -790, -3210, -1000, 8500, -30]
+// // 2: (8) [200, -200, 340, -300, -20, 50, 400, -460]
+// // 3: (5) [430, 1000, 700, 50, 90] と表示される
+// //これってさ、さっきの配列の中の配列にネストされている感じだよね！
+// const allMovements = accountMovements.flat(); //回想は一つだから、引数は必要ないよ！
+// console.log(allMovements);//(29) [200, 450, -400, 3000, -650, -130, 70, 1300, 5000, 3400, -150, -790, -3210, -1000, 8500, -30, 200, -200, 340, -300, -20, 50, 400, -460, 430, 1000, 700, 50, 90]ってなったよ！
+//
+// const overalBalance = allMovements.reduce((acc,mov) => acc + mov,0);//初期値の0を忘れないで
+// console.log(overalBalance); //17840
+//全てをチェーンにすることでみやすくすることができます。でもこの順番が大事ね。
+const overalBalance =
+  accounts
+    .map(acc => acc.movements)//まずはマップで新しい配列を作った後に
+    .flat()// ネストされている配列をフラットに、一つの再帰配列にします
+    .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
+  console.log(overalBalance);　//17840となる
 
-const anyDeposits2 = movements.some(mov => mov > 5000);
-console.log(anyDeposits2); //false
-
-//someメソッドと似ているeveryについて見てみましょう
-//配列の全てがこの条件に合致した場合にtrueを返す。名前通りだね。
-console.log(movements.every(mov => mov > 0)); //false
-console.log(account4.movements.every(mov => mov > 0)); //true
-//acount4のmoveは全てポジティブなんです　
-
-//separate callback
-const deposit = mov => mov > 0; //ここで関数にしておいて
-console.log(movements.some(deposit));//ここでその関数を呼ぶ方法がスマートかもね。
+  //フラットマップ⇨これはマップとフラットメソッドを一つに統合したもの。
+  //上のやつをflatMapで書き換えてみましょう
+  const overalBalance2 =
+    accounts
+      .flatMap(acc => acc.movements)//mapしてflatにする。この場合は引数に指定することができないからいつでも１ですよ。
+      .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
+    console.log(overalBalance2);　//17840となる
