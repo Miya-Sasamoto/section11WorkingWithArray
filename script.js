@@ -62,9 +62,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 
-const displayMovements = function(movements){ //必ずハードコーデイィングではなくて関数を作る癖をつけましょう。
+const displayMovements = function(movements,sort = false){ //必ずハードコーデイィングではなくて関数を作る癖をつけましょう。 //sortをfalseにしたのは、ボタンをクリックすることでこの関数を呼び出すようにしたいからだよ
   containerMovements.innerHTML = ""; //普通にいつもその初期化。　テキストコンテントみたい。
-  movements.forEach(function(mov,i){ //それぞれのアカウントのmovementsの配列があるよね。
+
+  const moves = sort ? movements.slice().sort((a,b) => a - b) : movements;//ここでslice()を使う理由は、コピーを作成するからです
+
+  moves.forEach(function(mov,i){ //それぞれのアカウントのmovementsの配列があるよね。
     const type = mov > 0 ? "deposit" : "withdrawal"; //三項演算子ですよ。だいぶ慣れた、
 
      const html = `
@@ -263,6 +266,13 @@ btnClose.addEventListener("click",function(e){
 
     inputCloseUsername.vaue = inputClosePin.value = ""; //まぁ見えないんだけど、ここで入力したところを空にするわけです。
 });
+
+let sorted = false;
+btnSort.addEventListener("click",function(e){
+  e.preventDefault();
+  displayMovements(currentAccount.movements,!sorted);//むずいけど大丈夫
+  sorted = !sorted; //これでフリップがうまくいきます。ボタンをかちゃかちゃ
+})
 
 //ここからスタート
 // const user = 'Steven Thomas Williams';//stwにしたい。
@@ -699,41 +709,76 @@ GOOD LUCK 😀
 // console.log(movements.some(deposit));//ここでその関数を呼ぶ方法がスマートかもね。
 
 //162,flat and flatMap
-const  arr = [[1,2,3],[4,5,6],7,8];
-console.log(arr.flat()); //(8) [1, 2, 3, 4, 5, 6, 7, 8]となる。全てが一つの配列になる
-//めちゃめちゃシンプル、コールバック関数もない。全ての要素を、再帰的に結合した新しい配列を作ります。
-
-const arrDeep = [[[1,2],3],[4,[5,6]],7,8];
-console.log(arrDeep.flat());//6) [Array(2), 3, 4, Array(2), 7, 8]となるということは1階層文しか進めないということです　
-
-const arrDeep2 = [[[1,2],3],[4,[5,6]],7,8];//これ、上と一緒ね。
-console.log(arrDeep2.flat(2));//(8) [1, 2, 3, 4, 5, 6, 7, 8]　深度の調整ができる。デフォルトは１。マックス２。
+// const  arr = [[1,2,3],[4,5,6],7,8];
+// console.log(arr.flat()); //(8) [1, 2, 3, 4, 5, 6, 7, 8]となる。全てが一つの配列になる
+// //めちゃめちゃシンプル、コールバック関数もない。全ての要素を、再帰的に結合した新しい配列を作ります。
 //
-// const accountMovements = accounts.map(acc => acc.movements);//mapだkら、accpuntsのmovementsを全て返すようにする
-// console.log(accountMovements);
-// //(4) [Array(8), Array(8), Array(8), Array(5)]
-// // 0: (8) [200, 450, -400, 3000, -650, -130, 70, 1300]
-// // 1: (8) [5000, 3400, -150, -790, -3210, -1000, 8500, -30]
-// // 2: (8) [200, -200, 340, -300, -20, 50, 400, -460]
-// // 3: (5) [430, 1000, 700, 50, 90] と表示される
-// //これってさ、さっきの配列の中の配列にネストされている感じだよね！
-// const allMovements = accountMovements.flat(); //回想は一つだから、引数は必要ないよ！
-// console.log(allMovements);//(29) [200, 450, -400, 3000, -650, -130, 70, 1300, 5000, 3400, -150, -790, -3210, -1000, 8500, -30, 200, -200, 340, -300, -20, 50, 400, -460, 430, 1000, 700, 50, 90]ってなったよ！
+// const arrDeep = [[[1,2],3],[4,[5,6]],7,8];
+// console.log(arrDeep.flat());//6) [Array(2), 3, 4, Array(2), 7, 8]となるということは1階層文しか進めないということです　
 //
-// const overalBalance = allMovements.reduce((acc,mov) => acc + mov,0);//初期値の0を忘れないで
-// console.log(overalBalance); //17840
-//全てをチェーンにすることでみやすくすることができます。でもこの順番が大事ね。
-const overalBalance =
-  accounts
-    .map(acc => acc.movements)//まずはマップで新しい配列を作った後に
-    .flat()// ネストされている配列をフラットに、一つの再帰配列にします
-    .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
-  console.log(overalBalance);　//17840となる
+// const arrDeep2 = [[[1,2],3],[4,[5,6]],7,8];//これ、上と一緒ね。
+// console.log(arrDeep2.flat(2));//(8) [1, 2, 3, 4, 5, 6, 7, 8]　深度の調整ができる。デフォルトは１。マックス２。
+// //
+// // const accountMovements = accounts.map(acc => acc.movements);//mapだkら、accpuntsのmovementsを全て返すようにする
+// // console.log(accountMovements);
+// // //(4) [Array(8), Array(8), Array(8), Array(5)]
+// // // 0: (8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+// // // 1: (8) [5000, 3400, -150, -790, -3210, -1000, 8500, -30]
+// // // 2: (8) [200, -200, 340, -300, -20, 50, 400, -460]
+// // // 3: (5) [430, 1000, 700, 50, 90] と表示される
+// // //これってさ、さっきの配列の中の配列にネストされている感じだよね！
+// // const allMovements = accountMovements.flat(); //回想は一つだから、引数は必要ないよ！
+// // console.log(allMovements);//(29) [200, 450, -400, 3000, -650, -130, 70, 1300, 5000, 3400, -150, -790, -3210, -1000, 8500, -30, 200, -200, 340, -300, -20, 50, 400, -460, 430, 1000, 700, 50, 90]ってなったよ！
+// //
+// // const overalBalance = allMovements.reduce((acc,mov) => acc + mov,0);//初期値の0を忘れないで
+// // console.log(overalBalance); //17840
+// //全てをチェーンにすることでみやすくすることができます。でもこの順番が大事ね。
+// const overalBalance =
+//   accounts
+//     .map(acc => acc.movements)//まずはマップで新しい配列を作った後に
+//     .flat()// ネストされている配列をフラットに、一つの再帰配列にします
+//     .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
+//   console.log(overalBalance);　//17840となる
+//
+//   //フラットマップ⇨これはマップとフラットメソッドを一つに統合したもの。
+//   //上のやつをflatMapで書き換えてみましょう
+//   const overalBalance2 =
+//     accounts
+//       .flatMap(acc => acc.movements)//mapしてflatにする。この場合は引数に指定することができないからいつでも１ですよ。
+//       .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
+//     console.log(overalBalance2);　//17840となる
 
-  //フラットマップ⇨これはマップとフラットメソッドを一つに統合したもの。
-  //上のやつをflatMapで書き換えてみましょう
-  const overalBalance2 =
-    accounts
-      .flatMap(acc => acc.movements)//mapしてflatにする。この場合は引数に指定することができないからいつでも１ですよ。
-      .reduce((acc,mov) => acc + mov,0);//そしてそれを全て足していきます
-    console.log(overalBalance2);　//17840となる
+//163: Sorting Arrays
+
+//Stringの場合
+const owners = ["Jonas","Zack","Adam","Martha"];
+console.log(owners.sort()); //(4) ['Adam', 'Jonas', 'Martha', 'Zack']となる
+//sort()は、並び替えを実現するメソッド。文字列順番、数字の大小などによる、昇順、降順の値を並び替えることができる。そしてこれは元の配列が変化します。
+console.log(owners);//(4) ['Adam', 'Jonas', 'Martha', 'Zack']って感じ。
+
+//数字の場合
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements.sort());//(8) [-130, -400, -650, 1300, 200, 3000, 450, 70]こうなっている。あれ？⇨これはsortが文字列を基準にsortを行うからです。まずは-が最初に来ます。
+
+//上記の事象を解消するためにやってみたいと思います。
+//とりあえずまぁこんな感じ
+//return < 0,a,b
+//return > 0,b,a
+//引数に、比較関数を与える。難しいので、「sort()数字」と調べたらたくさん出てきたよ。
+// movements.sort((a,b)=>{
+//    if (a > b) return 1;
+//    if (a < b ) return -1;
+// });
+// console.log(movements); //(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]
+//
+// movements.sort((a,b)=>{
+//    if (a > b) return -1;
+//    if (a < b ) return 1;
+// });
+// console.log(movements);// [3000, 1300, 450, 200, 70, -130, -400, -650]上の逆
+//でも実は上のように書かなくても
+movements.sort((a,b) => a - b);
+console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも昇順になります
+movements.sort((a,b) => b - a);
+console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも降順になります
+//しかしこのケースだと、みてわかる通り、文字列と数字が一緒にあると、機能しません。
