@@ -751,34 +751,85 @@ GOOD LUCK 😀
 //163: Sorting Arrays
 
 //Stringの場合
-const owners = ["Jonas","Zack","Adam","Martha"];
-console.log(owners.sort()); //(4) ['Adam', 'Jonas', 'Martha', 'Zack']となる
-//sort()は、並び替えを実現するメソッド。文字列順番、数字の大小などによる、昇順、降順の値を並び替えることができる。そしてこれは元の配列が変化します。
-console.log(owners);//(4) ['Adam', 'Jonas', 'Martha', 'Zack']って感じ。
-
-//数字の場合
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-console.log(movements.sort());//(8) [-130, -400, -650, 1300, 200, 3000, 450, 70]こうなっている。あれ？⇨これはsortが文字列を基準にsortを行うからです。まずは-が最初に来ます。
-
-//上記の事象を解消するためにやってみたいと思います。
-//とりあえずまぁこんな感じ
-//return < 0,a,b
-//return > 0,b,a
-//引数に、比較関数を与える。難しいので、「sort()数字」と調べたらたくさん出てきたよ。
-// movements.sort((a,b)=>{
-//    if (a > b) return 1;
-//    if (a < b ) return -1;
-// });
-// console.log(movements); //(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]
+// const owners = ["Jonas","Zack","Adam","Martha"];
+// console.log(owners.sort()); //(4) ['Adam', 'Jonas', 'Martha', 'Zack']となる
+// //sort()は、並び替えを実現するメソッド。文字列順番、数字の大小などによる、昇順、降順の値を並び替えることができる。そしてこれは元の配列が変化します。
+// console.log(owners);//(4) ['Adam', 'Jonas', 'Martha', 'Zack']って感じ。
 //
-// movements.sort((a,b)=>{
-//    if (a > b) return -1;
-//    if (a < b ) return 1;
-// });
-// console.log(movements);// [3000, 1300, 450, 200, 70, -130, -400, -650]上の逆
-//でも実は上のように書かなくても
-movements.sort((a,b) => a - b);
-console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも昇順になります
-movements.sort((a,b) => b - a);
-console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも降順になります
-//しかしこのケースだと、みてわかる通り、文字列と数字が一緒にあると、機能しません。
+// //数字の場合
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements.sort());//(8) [-130, -400, -650, 1300, 200, 3000, 450, 70]こうなっている。あれ？⇨これはsortが文字列を基準にsortを行うからです。まずは-が最初に来ます。
+//
+// //上記の事象を解消するためにやってみたいと思います。
+// //とりあえずまぁこんな感じ
+// //return < 0,a,b
+// //return > 0,b,a
+// //引数に、比較関数を与える。難しいので、「sort()数字」と調べたらたくさん出てきたよ。
+// // movements.sort((a,b)=>{
+// //    if (a > b) return 1;
+// //    if (a < b ) return -1;
+// // });
+// // console.log(movements); //(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]
+// //
+// // movements.sort((a,b)=>{
+// //    if (a > b) return -1;
+// //    if (a < b ) return 1;
+// // });
+// // console.log(movements);// [3000, 1300, 450, 200, 70, -130, -400, -650]上の逆
+// //でも実は上のように書かなくても
+// movements.sort((a,b) => a - b);
+// console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも昇順になります
+// movements.sort((a,b) => b - a);
+// console.log(movements);//(8) [-650, -400, -130, 70, 200, 450, 1300, 3000]これでも降順になります
+// //しかしこのケースだと、みてわかる通り、文字列と数字が一緒にあると、機能しません。
+
+//164:More Ways of Creating and Filling Arrays
+console.log([1,2,3,4,5,6,7]);//今まではこのように手書きで配列を作っていましたよね？
+console.log(new Array(1,2,3,4,5,6,7));//(7) [1, 2, 3, 4, 5, 6, 7]このようにして作成することもできる
+
+const x = new Array(7);
+console.log(x); //(7) [空 × 7]と表示される ７の空きがある一つの配列ができるというわけ。一つの引数しか渡さなかったら、その長さの分の空の配列を作る
+
+//fill()というメソッドが、空の配列に対しても呼び出せる唯一のメソッドでーーす
+x.fill(2);//fill()は元の配列も変異させます
+console.log(x);//(7) [2, 2, 2, 2, 2, 2, 2]となる。「この数字で全てを埋め尽くす」という意味
+
+const y = new Array(7);
+y.fill(1,3); //第二引数のインデックスから、第一引数の数字で埋める
+console.log(y);//(7) [空 × 3, 1, 1, 1, 1]となる
+
+const z = new Array(7);
+z.fill(1,3,5); //第二引数のインデックスから、第一引数の数字で埋める、第３引数は含まれない
+console.log(z);//(7) [空 × 3, 1, 1, 空 × 2]となる
+
+//しかしfill()は空の配列でないといけないというルールでもない
+const arr = [1,2,3,4,5,6,7];
+arr.fill(23,4,6);//第一引数の２３で埋めるのは、４から５のところ（第３引数は含まれないからね）　
+console.log(arr); //(7) [1, 2, 3, 4, 23, 23, 7]となる
+
+
+const xx = Array.from({length: 7},() => 1);//長さが７でそれを１で埋めるという意味。かっこ気をつけて
+console.log(xx);//(7) [1, 1, 1, 1, 1, 1, 1]となる
+//jonas的には、from の方が使い勝手はいいと言っています
+
+const yy = Array.from({length:7},(cur,i) => i + 1); //一つずつ足していくんだね。長さは７、今の数にインデックスが増えていくたびに一ずつ増えていく計算になる。
+console.log(yy);//(7) [1, 2, 3, 4, 5, 6, 7]
+
+//１００このサイコロを回して、それをログに出す
+const diceArray = Array.from({length:100},() => Math.floor(Math.random() * 6 + 1));
+console.log(diceArray);
+
+//はーーーむず。
+
+labelBalance.addEventListener("click",function(){
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    el => Number(el.textContent.replace("€",""))
+  );
+
+  console.log(movementsUI);
+
+});
+
+//これは、右上のトータルの金額のところをクリックすると、そのmovementsの動きがひとつひとつ見ることができます。
+//(8) [' 1300', ' 70', ' -130', ' -650', ' 3000', ' -400', ' 450', ' 200']と表示されます。
