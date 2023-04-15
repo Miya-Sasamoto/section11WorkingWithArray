@@ -900,3 +900,88 @@ const convertTitleCase = function(title){
 console.log(convertTitleCase("This is a nice title"));
 console.log(convertTitleCase("This is a LONG TITLE but not too long"));
 console.log(convertTitleCase("and here is another title with an EXAMPLE"));
+
+
+///////////////////////////////////////
+// Coding Challenge #4
+
+/*
+Julia and Kate are still studying dogs, and this time they are studying if dogs are eating too much or too little.（クソデブなのか、クソガリなのかを調べる）
+Eating too much means the dog's current food portion is larger than the recommended portion, and eating too little is the opposite.
+Eating an okay amount means the dog's current food portion is within a range 10% above and 10% below the recommended portion (see hint).（正常値というのは、食事量の上下１０％以内ならok）
+
+1. Loop over the array containing dog objects, and for each dog, calculate the recommended food portion and add it to the object as a new property. Do NOT create a new array, simply loop over the array. Forumla: recommendedFood = weight ** 0.75 * 28. (The result is in grams of food, and the weight needs to be in kg)
+2. Find Sarah's dog and log to the console whether it's eating too much or too little. HINT: Some dogs have multiple owners, so you first need to find Sarah in the owners array, and so this one is a bit tricky (on purpose) 🤓
+3. Create an array containing all owners of dogs who eat too much ('ownersEatTooMuch') and an array with all owners of dogs who eat too little ('ownersEatTooLittle').
+4. Log a string to the console for each array created in 3., like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+5. Log to the console whether there is any dog eating EXACTLY the amount of food that is recommended (just true or false)
+6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
+8. Create a shallow copy of the dogs array and sort it by recommended food portion in an ascending order (keep in mind that the portions are inside the array's objects)
+
+HINT 1: Use many different tools to solve these challenges, you can use the summary lecture to choose between them 😉
+HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
+
+TEST DATA:
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+GOOD LUCK 😀
+*/
+console.log("---CODING CHALENGE---");
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+//1 食事の推奨量を計算して新しく配列に格納する。計算式はそこにある通り
+dogs.forEach(dog => (dog.recfood = Math.trunc(dog.weight ** 0.75 * 28))); //dog.recfoorを新しく作る。Math.truncは小数点以下切り捨てだね
+console.log(dogs);
+
+//2　サラさんのわんこを探してそいつが食べ過ぎなのか、食べなさすぎなのかを調べる
+const dogSarah = dogs.find(dog => dog.owners.includes("Sarah")); //includeはbooleanを返すね。
+console.log(dogSarah);
+console.log(`Sarah's dog is eating ${dogSarah.curFood > dogSarah.recfood ? "TOO MUCH" : "TOO LITTKE "} `);
+
+//3 デブ犬の飼い主配列と、ガリ犬の飼い主配列を作る
+const ownersEatTooMuch = dogs
+.filter(dog => dog.curFood > dog.recfood) //デブ犬をここでフィルターする
+.map(dog => dog.owners) //ループさせる。意外とmapって理解できない
+.flat(); //ここ、concatにしようとしたけど、この場合[[]]って入れ子になっているからconcatじゃなくてflatだね
+console.log(ownersEatTooMuch); //(3) ['Matilda', 'Sarah', 'John']
+
+const ownersEatTooLittle = dogs
+.filter(dog => dog.curFood < dog.recfood)　//ガリ犬をここでフィルターして
+.flatMap(dog => dog.owners);  //あーーーーフラットマップ。だいたいfaltとmapは一緒に使われるね。
+console.log(ownersEatTooLittle); //(3) ['Alice', 'Bob', 'Michael']
+
+//4 "Matilda and Alice and Bob's dogs eat too much!"  ←こんな感じでログ出力させろと。
+console.log(`${ownersEatTooMuch.join(" and ")}'s dogs eat too much!`);
+console.log(`${ownersEatTooLittle.join(" and ")}'s dogs eat too less!`);
+
+//5　このバカ犬の中に、食べ物の推奨量をそれ通りに食べている賢い犬はいるか。booleanで回答
+console.log(dogs.some(dog => dog.recfood === dog.curFood));
+
+//6 キッチリじゃないけど、推奨量をまぁOKの寮の人がいるか確認します。
+//current > (recommended * 0.90) && current < (recommended * 1.10).これが計算式
+const checkEatingOkay = dog => dog.curFood > dog.recfood * 0.9 && dog.curFood < dog.recfood * 1.1;
+
+console.log(dogs.some(checkEatingOkay));
+
+//7　6の結果を元にして、新しい配列を作ってください。
+console.log(dogs.filter(checkEatingOkay));
+
+//8 食事の推奨寮順にsortしてください。
+const dogsSorted = dogs
+.slice()
+.sort((a,b) =>
+  a.recfood - b.recfood
+);
+console.log(dogsSorted);
