@@ -833,3 +833,70 @@ labelBalance.addEventListener("click",function(){
 
 //これは、右上のトータルの金額のところをクリックすると、そのmovementsの動きがひとつひとつ見ることができます。
 //(8) [' 1300', ' 70', ' -130', ' -650', ' 3000', ' -400', ' 450', ' 200']と表示されます。
+
+
+/////////////////////////////////////////////////////////////////////////////
+///////ARRAY METHODS PRACTICE
+//NO1
+//銀行にいくら入金されたかを知る、とてもシンプルな課題です
+// const bankDepositSum = accounts
+// .map(acc => acc.movements) //この状態だと、1つの配列に4つのアカウント分の配列が入っている。入れ子になっている
+// .flat(); //faltを使うことで、再起的に結合した一つの配列にすることができる。
+// //mapとfaltを一緒に使うのは実はよくあることです。なので,,,
+
+const bankDepositSum = accounts
+.flatMap(acc => acc.movements) //このように一つにすることができます。
+.filter(mov => mov > 0) //0以上の値のみ残す
+.reduce((sum,mov) => sum + mov,0);
+
+console.log(bankDepositSum);//25180じゃじゃーん
+
+
+//No2,
+//1000ドル以上の預金が何軒あったかを数える
+//やり方1つ目
+const numDeposits1000 = accounts
+.flatMap(acc => acc.movements) //配列を一つにする
+.filter(acc => acc >= 1000).length; //ここでは何軒あったかを知りたいからlengthで配列の長さを計算すればOK
+
+//やり方2つ目.こっちの方が難しいかも
+const numDeposits1000Part2 = accounts
+.flatMap(acc => acc.movements) //配列を一つにする
+.reduce((count,cur)=> cur >= 1000 ? count + 1  : count,0); //雪だるまのreduce.
+//考え方は、、今の値が1000以上だったら、countをひとつ増やして、違かったらそのまま。reduceだから第二引数が必要だよね。count + 1ならcount ++でもいいんじゃないか？それは違う。それは難しいですが、違うんです。もしここでどうしても++演算子を使いたいのなら、 ++count　と前に持ってきましょう
+
+console.log(numDeposits1000);　//6いえーい
+console.log(numDeposits1000Part2);
+
+//もし++演算子を使いたいならこう使うんです。
+let a = 10;
+console.log(++a);
+console.log(a);
+
+
+//No3  入金と出勤の合計を含むオブジェクトを作る。これをreduceで一気に解決しましょう！
+const sums = accounts
+.flatMap(acc => acc.movements)//これはいつも通り、一つのフラットなあ配列の値にします。
+.reduce((sums,cur) => {
+  cur > 0 ? sums.deposits += cur : sums.widthdrawals += cur; //今の値が0以上だったら、sums(雪だるま)のdepositsに足して行って(+=なの忘れないでね)
+  return sums; //必ずreturnを忘れないでください
+},{deposits:0,widthdrawals:0}) //reduceの初期値にこんな値を入れられることを初めて知ったよ
+
+console.log(sums);//{deposits: 25180, widthdrawals: -7340}
+
+//4　任意の文字列をタイトルにする方法　全て単語の始まりを大文字にする方法
+//this is a nice title => This Is a Nice Title (aは例外)
+
+const convertTitleCase = function(title){
+  const exception = ["a","the","but","an","or","on","in","with","and"];//これらの文字が来たら大文字にしませんよという意味。
+
+  const titleCase = title
+  .toLowerCase() //全てを小文字にして
+  .split(" ") //空白で区切る
+  .map(word => exception.includes(word) ? word : word[0].toUpperCase() + word.slice(1)) //mapを使って、それぞれの一文字目を大文字にして、それ以降の文字をsliceメソッドで返す。上の定義で定めた値が入っているかをここで確認します。
+  .join(" ");
+  return titleCase;
+}
+console.log(convertTitleCase("This is a nice title"));
+console.log(convertTitleCase("This is a LONG TITLE but not too long"));
+console.log(convertTitleCase("and here is another title with an EXAMPLE"));
